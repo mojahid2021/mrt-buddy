@@ -3,17 +3,33 @@ package net.adhikary.mrtbuddy.ui.screens.home
 import MoreScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +37,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -41,7 +61,6 @@ import net.adhikary.mrtbuddy.ui.components.BalanceCard
 import net.adhikary.mrtbuddy.ui.components.CalculatorIcon
 import net.adhikary.mrtbuddy.ui.components.CardIcon
 import net.adhikary.mrtbuddy.ui.components.HistoryIcon
-import net.adhikary.mrtbuddy.ui.components.TransactionHistoryList
 import net.adhikary.mrtbuddy.ui.screens.farecalculator.FareCalculatorScreen
 import net.adhikary.mrtbuddy.ui.screens.history.HistoryScreen
 import net.adhikary.mrtbuddy.ui.screens.licenses.OpenSourceLicensesScreen
@@ -49,6 +68,7 @@ import net.adhikary.mrtbuddy.ui.screens.stationmap.StationMapScreen
 import net.adhikary.mrtbuddy.ui.screens.transactionlist.TransactionListScreen
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 enum class Screen(val title: StringResource) {
@@ -62,6 +82,7 @@ enum class Screen(val title: StringResource) {
 }
 
 @Composable
+@Preview
 fun MainScreen(
     viewModel: MainScreenViewModel = koinViewModel(),
     navController: NavHostController = rememberNavController()
@@ -77,73 +98,18 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.surface,
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.05f)
+                    )
+                )
+            ),
         bottomBar = {
             if (currentScreen != Screen.StationMap) {
-                NavigationBar(
-                    windowInsets = WindowInsets.navigationBars
-                ) {
-                    NavigationBarItem(
-                        icon = { CalculatorIcon() },
-                        label = { Text(stringResource(Res.string.fare)) },
-                        selected = currentScreen == Screen.Calculator,
-                        onClick = {
-                            navController.navigate(Screen.Calculator.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
-                    NavigationBarItem(
-                        icon = { CardIcon() },
-                        label = { Text(stringResource(Res.string.balance)) },
-                        selected = currentScreen == Screen.Home,
-                        onClick = {
-                            navController.navigate(Screen.Home.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
-                    NavigationBarItem(
-                        icon = { HistoryIcon() },
-                        label = { Text(stringResource(Res.string.historyTab)) },
-                        selected = currentScreen == Screen.History || currentScreen == Screen.TransactionList,
-                        onClick = {
-                            navController.navigate(Screen.History.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
-                    NavigationBarItem(
-                        icon = { AppsIcon() },
-                        label = { Text(stringResource(Res.string.more)) },
-                        selected = currentScreen == Screen.More,
-                        onClick = {
-                            navController.navigate(Screen.More.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                    inclusive = false
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
-                }
+                ModernNavigationBar(currentScreen, navController)
             }
         }
     ) { paddingValues ->
@@ -153,24 +119,11 @@ fun MainScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             composable(route = Screen.Home.name) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    BalanceCard(
-                        cardState = uiState.cardState,
-                        cardName = uiState.cardName,
-                        cardIdm = uiState.cardIdm,
-                    )
-
-                    if (hasTransactions) {
-                        TransactionHistoryList(uiState.transactionWithAmount)
-                    }
-                }
+                ModernHomeScreen(
+                    uiState = uiState,
+                    hasTransactions = hasTransactions,
+                    paddingValues = paddingValues
+                )
             }
 
             composable(route = Screen.Calculator.name) {
@@ -231,5 +184,381 @@ fun MainScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ModernNavigationBar(
+    currentScreen: Screen,
+    navController: NavHostController
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 0.dp, vertical = 0.dp),
+        shape = RoundedCornerShape(0.dp), // Removed corner radius for bottom nav
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+        )
+    ) {
+        NavigationBar(
+            windowInsets = WindowInsets.navigationBars,
+            tonalElevation = 0.dp,
+            containerColor = Color.Transparent,
+            modifier = Modifier
+                .height(70.dp) // Set a minimum height for better touch targets
+                .padding(horizontal = 0.dp, vertical = 0.dp) // Remove extra padding for a tighter fit
+        ) {
+            NavigationBarItem(
+                icon = {
+                    ModernNavIcon(
+                        icon = { CalculatorIcon() },
+                        isSelected = currentScreen == Screen.Calculator
+                    )
+                },
+                label = {
+                    Text(
+                        stringResource(Res.string.fare),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = if (currentScreen == Screen.Calculator) FontWeight.Bold else FontWeight.Medium
+                        )
+                    )
+                },
+                selected = currentScreen == Screen.Calculator,
+                onClick = {
+                    navigateToScreen(navController, Screen.Calculator)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            )
+            NavigationBarItem(
+                icon = {
+                    ModernNavIcon(
+                        icon = { CardIcon() },
+                        isSelected = currentScreen == Screen.Home
+                    )
+                },
+                label = {
+                    Text(
+                        stringResource(Res.string.balance),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = if (currentScreen == Screen.Home) FontWeight.Bold else FontWeight.Medium
+                        )
+                    )
+                },
+                selected = currentScreen == Screen.Home,
+                onClick = {
+                    navigateToScreen(navController, Screen.Home)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            )
+            NavigationBarItem(
+                icon = {
+                    ModernNavIcon(
+                        icon = { HistoryIcon() },
+                        isSelected = currentScreen == Screen.History || currentScreen == Screen.TransactionList
+                    )
+                },
+                label = {
+                    Text(
+                        stringResource(Res.string.historyTab),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = if (currentScreen == Screen.History || currentScreen == Screen.TransactionList) FontWeight.Bold else FontWeight.Medium
+                        )
+                    )
+                },
+                selected = currentScreen == Screen.History || currentScreen == Screen.TransactionList,
+                onClick = {
+                    navigateToScreen(navController, Screen.History)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            )
+            NavigationBarItem(
+                icon = {
+                    ModernNavIcon(
+                        icon = { AppsIcon() },
+                        isSelected = currentScreen == Screen.More
+                    )
+                },
+                label = {
+                    Text(
+                        stringResource(Res.string.more),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = if (currentScreen == Screen.More) FontWeight.Bold else FontWeight.Medium
+                        )
+                    )
+                },
+                selected = currentScreen == Screen.More,
+                onClick = {
+                    navigateToScreen(navController, Screen.More)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun ModernNavIcon(
+    icon: @Composable () -> Unit,
+    isSelected: Boolean
+) {
+    Box(
+        modifier = Modifier
+            .size(36.dp)
+            .clip(CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        val iconColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        CompositionLocalProvider(LocalContentColor provides iconColor) {
+            icon()
+        }
+    }
+}
+
+@Composable
+private fun ModernHomeScreen(
+    uiState: MainScreenState,
+    hasTransactions: Boolean,
+    paddingValues: PaddingValues
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        // Welcome section with modern styling - Fixed at top
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "Welcome back",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Light,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                )
+                Text(
+                    text = "MRT Buddy",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
+
+            // Quick stats card
+            Card(
+                modifier = Modifier
+                    .height(60.dp)
+                    .width(120.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "${uiState.transaction.size}",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                    Text(
+                        text = "Transactions",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    )
+                }
+            }
+        }
+
+        // Enhanced Balance Card with modern styling - Fixed
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            BalanceCard(
+                cardState = uiState.cardState,
+                cardName = uiState.cardName,
+                cardIdm = uiState.cardIdm,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+
+        if (hasTransactions) {
+            // Recent Transactions section header - Fixed
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Recent Activity",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                )
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Text(
+                        text = "View All",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+            }
+
+            // Scrollable Recent Activity Section - Only this part scrolls
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f), // Takes remaining space
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    val validTransactions = uiState.transactionWithAmount
+                        .filter { it.transaction.timestamp.year >= 2015 }
+
+                    items(validTransactions.size) { index ->
+                        val transactionWithAmount = validTransactions[index]
+                        ModernTransactionItem(
+                            transaction = transactionWithAmount,
+                            showDivider = index < validTransactions.size - 1
+                        )
+                    }
+                }
+            }
+        } else {
+            // If no transactions, add some empty space
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun ModernTransactionItem(
+    transaction: net.adhikary.mrtbuddy.model.TransactionWithAmount,
+    showDivider: Boolean
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (transaction.transaction.fromStation.isNotEmpty())
+                        "${transaction.transaction.fromStation} → ${transaction.transaction.toStation}"
+                    else "Balance Update",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "${transaction.transaction.timestamp.dayOfMonth}/${transaction.transaction.timestamp.monthNumber}/${transaction.transaction.timestamp.year}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = "৳${transaction.transaction.balance}",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                transaction.amount?.let { amount ->
+                    Text(
+                        text = if (amount > 0) "+৳$amount" else "৳$amount",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (amount > 0)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
+
+        if (showDivider) {
+            androidx.compose.material3.HorizontalDivider(
+                modifier = Modifier.padding(top = 12.dp),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+            )
+        }
+    }
+}
+
+private fun navigateToScreen(navController: NavHostController, screen: Screen) {
+    navController.navigate(screen.name) {
+        popUpTo(navController.graph.findStartDestination().route ?: Screen.Home.name) {
+            saveState = true
+            inclusive = false
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
