@@ -102,7 +102,8 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
         ) {
             // Enhanced Header with Progress Indicator
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(), // Removed background modifier
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -482,8 +483,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.03f)
                             )
                         )
-                    )
-            ) {
+                    )    ) {
                 // Rescan button (if not Android)
                 if (getPlatform().name != "android") {
                     Card(

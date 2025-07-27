@@ -108,13 +108,7 @@ fun FareCalculatorScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.03f)
-                    )
-                )
+                MaterialTheme.colorScheme.background // Set layout background to theme background
             )
     ) {
         LazyColumn(
@@ -134,7 +128,7 @@ fun FareCalculatorScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f)
+                            containerColor = MaterialTheme.colorScheme.background // Use layout background for header card
                         ),
                         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                     ) {
