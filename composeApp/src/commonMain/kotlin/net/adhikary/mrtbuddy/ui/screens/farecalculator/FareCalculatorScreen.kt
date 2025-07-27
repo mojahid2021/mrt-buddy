@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -57,9 +58,23 @@ fun FareCalculatorScreen(
     viewModel: FareCalculatorViewModel = koinViewModel(),
     cardState: CardState
 ) {
-    val uiState = viewModel.state.collectAsState()
+    val uiState by viewModel.state.collectAsState()
     var headerVisible by remember { mutableStateOf(false) }
     var contentVisible by remember { mutableStateOf(false) }
+
+    // Animation specs
+    val headerAnimSpec = spring<androidx.compose.ui.unit.IntOffset>(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow
+    )
+    val contentAnimSpec = tween<androidx.compose.ui.unit.IntOffset>(400, delayMillis = 100)
+    val infoAnimSpec = tween<androidx.compose.ui.unit.IntOffset>(400, delayMillis = 300)
+    val tipsAnimSpec = tween<androidx.compose.ui.unit.IntOffset>(400, delayMillis = 400)
+    val fadeInAnimSpec = tween<Float>(500, delayMillis = 200)
+    val scaleInAnimSpec = spring<Float>(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow
+    )
 
     // Animate entrance
     LaunchedEffect(Unit) {
@@ -107,16 +122,12 @@ fun FareCalculatorScreen(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            item {
-                // Enhanced Header with Animation
+            item(key = "header") {
                 AnimatedVisibility(
                     visible = headerVisible,
                     enter = slideInVertically(
                         initialOffsetY = { -it },
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
+                        animationSpec = headerAnimSpec
                     ) + fadeIn()
                 ) {
                     Card(
@@ -174,65 +185,57 @@ fun FareCalculatorScreen(
                 }
             }
 
-            item {
-                // Animated Station Selection
+            item(key = "stationSelection") {
                 AnimatedVisibility(
                     visible = contentVisible,
                     enter = slideInVertically(
                         initialOffsetY = { it / 2 },
-                        animationSpec = tween(400, delayMillis = 100)
-                    ) + fadeIn(animationSpec = tween(400, delayMillis = 100))
+                        animationSpec = contentAnimSpec
+                    ) + fadeIn(animationSpec = fadeInAnimSpec)
                 ) {
-                    StationSelectionSection(uiState.value, viewModel)
+                    StationSelectionSection(uiState, viewModel)
                 }
             }
 
-            item {
-                // Animated Fare Display
+            item(key = "fareDisplay") {
                 AnimatedVisibility(
                     visible = contentVisible,
                     enter = scaleIn(
                         initialScale = 0.8f,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
-                    ) + fadeIn(animationSpec = tween(500, delayMillis = 200))
+                        animationSpec = scaleInAnimSpec
+                    ) + fadeIn(animationSpec = fadeInAnimSpec)
                 ) {
-                    FareDisplayCard(uiState.value, viewModel)
+                    FareDisplayCard(uiState, viewModel)
                 }
             }
 
-            // Show additional info cards when stations are selected
-            if (uiState.value.fromStation != null && uiState.value.toStation != null) {
-                item {
+            if (uiState.fromStation != null && uiState.toStation != null) {
+                item(key = "travelInfo") {
                     AnimatedVisibility(
                         visible = contentVisible,
                         enter = slideInVertically(
                             initialOffsetY = { it / 3 },
-                            animationSpec = tween(400, delayMillis = 300)
-                        ) + fadeIn(animationSpec = tween(400, delayMillis = 300))
+                            animationSpec = infoAnimSpec
+                        ) + fadeIn(animationSpec = fadeInAnimSpec)
                     ) {
-                        TravelInfoCard(uiState.value)
+                        TravelInfoCard(uiState)
                     }
                 }
             }
 
-            item {
-                // Tips Card
+            item(key = "tips") {
                 AnimatedVisibility(
                     visible = contentVisible,
                     enter = slideInVertically(
                         initialOffsetY = { it / 4 },
-                        animationSpec = tween(400, delayMillis = 400)
-                    ) + fadeIn(animationSpec = tween(400, delayMillis = 400))
+                        animationSpec = tipsAnimSpec
+                    ) + fadeIn(animationSpec = fadeInAnimSpec)
                 ) {
                     QuickTipsCard()
                 }
             }
 
-            // Add some bottom padding
-            item {
+            item(key = "bottomPad") {
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

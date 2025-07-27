@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.CheckCircle
@@ -145,54 +146,25 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
                         )
                     }
                 }
-
-                // Progress indicator
-                val progress = when {
-                    uiState.fromStation != null && uiState.toStation != null -> 1f
-                    uiState.fromStation != null || uiState.toStation != null -> 0.5f
-                    else -> 0f
-                }
-
-                // Progress bar
-                LinearProgressIndicator(
-                    progress = progress,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(RoundedCornerShape(3.dp)),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                )
-
-                // Progress indicator
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                    )
-                ) {
-                    Text(
-                        text = "${(progress * 100).toInt()}%",
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
             }
-
 
 
             // Enhanced From Station Dropdown
             StationDropdownField(
                 label = "From Station",
-                value = uiState.fromStation?.let { StationService.translate(it.name) } ?: stringResource(Res.string.selectOrigin),
+                value = uiState.fromStation?.let { StationService.translate(it.name) }
+                    ?: stringResource(Res.string.selectOrigin),
                 expanded = uiState.fromExpanded,
                 onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleFromExpanded) },
                 onDismiss = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
                 stations = viewModel.stations,
-                onStationSelected = { station -> viewModel.onAction(FareCalculatorAction.UpdateFromStation(station)) },
+                onStationSelected = { station ->
+                    viewModel.onAction(
+                        FareCalculatorAction.UpdateFromStation(
+                            station
+                        )
+                    )
+                },
                 leadingIcon = Icons.Default.LocationOn,
                 iconTint = MaterialTheme.colorScheme.primary,
                 containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
@@ -250,12 +222,19 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
             // Enhanced To Station Dropdown
             StationDropdownField(
                 label = "To Station",
-                value = uiState.toStation?.let { StationService.translate(it.name) } ?: stringResource(Res.string.selectDestination),
+                value = uiState.toStation?.let { StationService.translate(it.name) }
+                    ?: stringResource(Res.string.selectDestination),
                 expanded = uiState.toExpanded,
                 onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleToExpanded) },
                 onDismiss = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
                 stations = viewModel.stations,
-                onStationSelected = { station -> viewModel.onAction(FareCalculatorAction.UpdateToStation(station)) },
+                onStationSelected = { station ->
+                    viewModel.onAction(
+                        FareCalculatorAction.UpdateToStation(
+                            station
+                        )
+                    )
+                },
                 leadingIcon = Icons.Default.LocationOn,
                 iconTint = MaterialTheme.colorScheme.secondary,
                 containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f),
@@ -612,12 +591,17 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                     Card(
                                         shape = RoundedCornerShape(8.dp),
                                         colors = CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f)
+                                            containerColor = MaterialTheme.colorScheme.secondary.copy(
+                                                alpha = 0.12f
+                                            )
                                         )
                                     ) {
                                         Text(
                                             text = "MRT Discount",
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                            modifier = Modifier.padding(
+                                                horizontal = 8.dp,
+                                                vertical = 4.dp
+                                            ),
                                             style = MaterialTheme.typography.labelSmall.copy(
                                                 fontWeight = FontWeight.Medium
                                             ),
@@ -643,6 +627,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                         MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
                                     }
                                 }
+
                                 else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
                             }
                         ),
@@ -670,7 +655,11 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                 modifier = Modifier.size(20.dp)
                                             )
                                             Text(
-                                                text = "${stringResource(Res.string.balanceAmount)} ৳ ${translateNumber(balance)}",
+                                                text = "${stringResource(Res.string.balanceAmount)} ৳ ${
+                                                    translateNumber(
+                                                        balance
+                                                    )
+                                                }",
                                                 style = MaterialTheme.typography.titleMedium.copy(
                                                     fontWeight = FontWeight.Bold
                                                 ),
@@ -678,13 +667,16 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                             )
                                         }
 
-                                        val roundTrips = if (uiState.calculatedFare > 0) balance / (uiState.discountedFare * 2) else 0
+                                        val roundTrips =
+                                            if (uiState.calculatedFare > 0) balance / (uiState.discountedFare * 2) else 0
                                         if (roundTrips > 0) {
                                             Spacer(modifier = Modifier.height(12.dp))
                                             Card(
                                                 shape = RoundedCornerShape(16.dp),
                                                 colors = CardDefaults.cardColors(
-                                                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                                    containerColor = MaterialTheme.colorScheme.primary.copy(
+                                                        alpha = 0.1f
+                                                    )
                                                 )
                                             ) {
                                                 Row(
@@ -699,7 +691,11 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                         modifier = Modifier.size(18.dp)
                                                     )
                                                     Text(
-                                                        text = "${translateNumber(roundTrips)} ${stringResource(Res.string.roundTrips)}",
+                                                        text = "${translateNumber(roundTrips)} ${
+                                                            stringResource(
+                                                                Res.string.roundTrips
+                                                            )
+                                                        }",
                                                         style = MaterialTheme.typography.bodyLarge.copy(
                                                             fontWeight = FontWeight.SemiBold
                                                         ),
@@ -724,7 +720,11 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
                                                 Text(
-                                                    text = "${stringResource(Res.string.yourBalance)} ৳ ${translateNumber(balance)}",
+                                                    text = "${stringResource(Res.string.yourBalance)} ৳ ${
+                                                        translateNumber(
+                                                            balance
+                                                        )
+                                                    }",
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontWeight = FontWeight.Bold
                                                     ),
@@ -734,7 +734,9 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                 Text(
                                                     text = "Need ৳ ${translateNumber(uiState.calculatedFare - balance)} more",
                                                     style = MaterialTheme.typography.bodyMedium,
-                                                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+                                                    color = MaterialTheme.colorScheme.error.copy(
+                                                        alpha = 0.8f
+                                                    ),
                                                     textAlign = TextAlign.Center
                                                 )
                                             }
@@ -754,11 +756,17 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                             Icon(
                                                 imageVector = Icons.Default.MonetizationOn,
                                                 contentDescription = "Single ticket",
-                                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                                tint = MaterialTheme.colorScheme.onSurface.copy(
+                                                    alpha = 0.7f
+                                                ),
                                                 modifier = Modifier.size(20.dp)
                                             )
                                             Text(
-                                                text = "${stringResource(Res.string.singleTicket)} ৳ ${translateNumber(uiState.calculatedFare)}",
+                                                text = "${stringResource(Res.string.singleTicket)} ৳ ${
+                                                    translateNumber(
+                                                        uiState.calculatedFare
+                                                    )
+                                                }",
                                                 style = MaterialTheme.typography.titleLarge.copy(
                                                     fontWeight = FontWeight.Bold
                                                 ),
@@ -860,7 +868,8 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                 InfoRow(
                     icon = Icons.Default.AccessTime,
                     title = "Estimated Time",
-                    value = "15-20 minutes",
+//                    value = "15-20 minutes",
+                    value = "N/A",
                     iconColor = MaterialTheme.colorScheme.secondary
                 )
 
@@ -868,7 +877,8 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                 InfoRow(
                     icon = Icons.Default.Timeline,
                     title = "Distance",
-                    value = "~12 km",
+//                    value = "~12 km",
+                    value = "N/A",
                     iconColor = MaterialTheme.colorScheme.tertiary
                 )
 
@@ -1027,7 +1037,7 @@ fun QuickTipsCard() {
                 )
 
                 TipItem(
-                    icon = Icons.Default.TrendingUp,
+                    icon = Icons.AutoMirrored.Filled.TrendingUp,
                     text = "Check your card balance regularly to avoid delays",
                     iconColor = MaterialTheme.colorScheme.tertiary
                 )
