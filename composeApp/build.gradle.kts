@@ -47,6 +47,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             //  implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(compose.materialIconsExtended)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.kotlinx.datetime)

@@ -1,5 +1,7 @@
 package net.adhikary.mrtbuddy.ui.screens.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,13 +14,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -26,16 +38,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,202 +87,294 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalculatorViewModel) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Header
+            // Enhanced Header with Progress Indicator
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = "Location",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Route Selection",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            // From Station Dropdown with modern styling
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "From Station",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                )
-
-                ExposedDropdownMenuBox(
-                    expanded = uiState.fromExpanded,
-                    onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleFromExpanded) }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    OutlinedTextField(
-                        value = uiState.fromStation?.let { StationService.translate(it.name) }
-                            ?: stringResource(Res.string.selectOrigin),
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = uiState.fromExpanded)
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = "From",
-                                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
-                                modifier = Modifier.size(20.dp)
-                            )
-                        },
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
-                            .fillMaxWidth(),
-                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
-                            unfocusedContainerColor = Color.Transparent
-                        ),
-                        shape = RoundedCornerShape(16.dp),
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
 
-                    ExposedDropdownMenu(
-                        expanded = uiState.fromExpanded,
-                        onDismissRequest = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
-                        modifier = Modifier.background(
-                            MaterialTheme.colorScheme.surface,
-                            RoundedCornerShape(12.dp)
+                    Card(
+                        modifier = Modifier.size(40.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                         )
                     ) {
-                        viewModel.stations.forEach { station ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = StationService.translate(station.name),
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                },
-                                onClick = { viewModel.onAction(FareCalculatorAction.UpdateFromStation(station)) }
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Route,
+                                contentDescription = "Route",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
+
+                    Column {
+                        Text(
+                            text = "Select Route",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Choose your journey stations",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+
+                // Progress indicator
+                val progress = when {
+                    uiState.fromStation != null && uiState.toStation != null -> 1f
+                    uiState.fromStation != null || uiState.toStation != null -> 0.5f
+                    else -> 0f
+                }
+
+                // Progress bar
+                LinearProgressIndicator(
+                    progress = progress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .clip(RoundedCornerShape(3.dp)),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                )
+
+                // Progress indicator
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    )
+                ) {
+                    Text(
+                        text = "${(progress * 100).toInt()}%",
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
 
-            // Swap button with modern design
+
+
+            // Enhanced From Station Dropdown
+            StationDropdownField(
+                label = "From Station",
+                value = uiState.fromStation?.let { StationService.translate(it.name) } ?: stringResource(Res.string.selectOrigin),
+                expanded = uiState.fromExpanded,
+                onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleFromExpanded) },
+                onDismiss = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
+                stations = viewModel.stations,
+                onStationSelected = { station -> viewModel.onAction(FareCalculatorAction.UpdateFromStation(station)) },
+                leadingIcon = Icons.Default.LocationOn,
+                iconTint = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
+                isSelected = uiState.fromStation != null
+            )
+
+            // Enhanced Swap Button
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                IconButton(
-                    onClick = {
-                        // Add swap functionality if needed
-                        // viewModel.onAction(FareCalculatorAction.SwapStations)
-                    },
+                val rotationAngle by animateFloatAsState(
+                    targetValue = if (uiState.fromStation != null && uiState.toStation != null) 180f else 0f,
+                    animationSpec = spring()
+                )
+
+                Card(
                     modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
-                            CircleShape
-                        )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Swap stations",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
+                        .size(56.dp)
+                        .clickable(enabled = uiState.fromStation != null && uiState.toStation != null) {
+                            // viewModel.onAction(FareCalculatorAction.SwapStations)
+                        },
+                    shape = CircleShape,
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (uiState.fromStation != null && uiState.toStation != null) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        }
+                    ),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = if (uiState.fromStation != null && uiState.toStation != null) 4.dp else 2.dp
                     )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.SwapVert,
+                            contentDescription = "Swap stations",
+                            tint = if (uiState.fromStation != null && uiState.toStation != null) {
+                                MaterialTheme.colorScheme.onPrimary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                            },
+                            modifier = Modifier
+                                .size(24.dp)
+                                .rotate(rotationAngle)
+                        )
+                    }
                 }
             }
 
-            // To Station Dropdown with modern styling
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "To Station",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            // Enhanced To Station Dropdown
+            StationDropdownField(
+                label = "To Station",
+                value = uiState.toStation?.let { StationService.translate(it.name) } ?: stringResource(Res.string.selectDestination),
+                expanded = uiState.toExpanded,
+                onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleToExpanded) },
+                onDismiss = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
+                stations = viewModel.stations,
+                onStationSelected = { station -> viewModel.onAction(FareCalculatorAction.UpdateToStation(station)) },
+                leadingIcon = Icons.Default.LocationOn,
+                iconTint = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f),
+                isSelected = uiState.toStation != null
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StationDropdownField(
+    label: String,
+    value: String,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onDismiss: () -> Unit,
+    stations: List<net.adhikary.mrtbuddy.data.model.Station>,
+    onStationSelected: (net.adhikary.mrtbuddy.data.model.Station) -> Unit,
+    leadingIcon: ImageVector,
+    iconTint: Color,
+    containerColor: Color,
+    isSelected: Boolean
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Selected",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(16.dp)
                 )
+            }
+        }
 
-                ExposedDropdownMenuBox(
-                    expanded = uiState.toExpanded,
-                    onExpandedChange = { viewModel.onAction(FareCalculatorAction.ToggleToExpanded) }
-                ) {
-                    OutlinedTextField(
-                        value = uiState.toStation?.let { StationService.translate(it.name) }
-                            ?: stringResource(Res.string.selectDestination),
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = uiState.toExpanded)
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = "To",
-                                tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.7f),
-                                modifier = Modifier.size(20.dp)
-                            )
-                        },
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
-                            .fillMaxWidth(),
-                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f),
-                            unfocusedContainerColor = Color.Transparent
-                        ),
-                        shape = RoundedCornerShape(16.dp),
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = uiState.toExpanded,
-                        onDismissRequest = { viewModel.onAction(FareCalculatorAction.DismissDropdowns) },
-                        modifier = Modifier.background(
-                            MaterialTheme.colorScheme.surface,
-                            RoundedCornerShape(12.dp)
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = onExpandedChange
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                leadingIcon = {
+                    Card(
+                        modifier = Modifier.size(32.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = containerColor
                         )
                     ) {
-                        viewModel.stations.forEach { station ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = StationService.translate(station.name),
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                },
-                                onClick = { viewModel.onAction(FareCalculatorAction.UpdateToStation(station)) }
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = leadingIcon,
+                                contentDescription = label,
+                                tint = iconTint,
+                                modifier = Modifier.size(16.dp)
                             )
                         }
                     }
+                },
+                modifier = Modifier
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
+                    .fillMaxWidth(),
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = iconTint,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    focusedContainerColor = containerColor,
+                    unfocusedContainerColor = if (isSelected) containerColor.copy(alpha = 0.5f) else Color.Transparent
+                ),
+                shape = RoundedCornerShape(16.dp),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                )
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = onDismiss,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(16.dp)
+                    )
+                    .padding(vertical = 8.dp)
+            ) {
+                stations.forEach { station ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = StationService.translate(station.name),
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                        },
+                        onClick = { onStationSelected(station) },
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
                 }
             }
         }
@@ -278,85 +386,121 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(28.dp),
+            .height(320.dp), // Increased height for better content layout
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         if (viewModel.state.value.fromStation == null || viewModel.state.value.toStation == null) {
-            // Empty state with modern design
+            // Enhanced empty state
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Brush.verticalGradient(
+                        Brush.radialGradient(
                             colors = listOf(
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.05f)
-                            )
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
+                                MaterialTheme.colorScheme.surface,
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.08f)
+                            ),
+                            radius = 800f
                         )
                     )
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
+                        .padding(32.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Animated icon container
                     Card(
-                        modifier = Modifier.size(80.dp),
-                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.size(96.dp),
+                        shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                        )
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        ),
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Info,
+                                imageVector = Icons.Default.DirectionsTransit,
                                 contentDescription = "Select stations",
-                                modifier = Modifier.size(36.dp),
+                                modifier = Modifier.size(48.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
                         text = stringResource(Res.string.selectStations),
-                        style = MaterialTheme.typography.headlineSmall.copy(
+                        style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
                         text = stringResource(Res.string.chooseOrgDest),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
                     )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Quick start hint
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Lightbulb,
+                                contentDescription = "Tip",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = "Select stations above to calculate fare",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 }
             }
         } else {
-            // Fare display with gradient background
+            // Enhanced fare display with better visual hierarchy
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.05f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                                MaterialTheme.colorScheme.surface,
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.03f)
                             )
                         )
                     )
@@ -366,151 +510,262 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                     Card(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(16.dp)
+                            .padding(20.dp)
                             .clickable { RescanManager.requestRescan() },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                        )
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        ),
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                     ) {
-                        Text(
-                            text = stringResource(Res.string.rescan),
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                            style = MaterialTheme.typography.labelMedium.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,
+                                contentDescription = "Rescan",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = stringResource(Res.string.rescan),
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
+                        .padding(28.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Header section
+                    // Enhanced header section
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(modifier = Modifier.height(if (getPlatform().name != "android") 40.dp else 16.dp))
+                        Spacer(modifier = Modifier.height(if (getPlatform().name != "android") 48.dp else 20.dp))
 
+                        // Service type badge
                         Card(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                             )
                         ) {
-                            Text(
-                                text = stringResource(Res.string.withMRT),
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.DirectionsTransit,
+                                    contentDescription = "MRT",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = stringResource(Res.string.withMRT),
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
 
-                        Text(
-                            text = "৳ ${translateNumber(viewModel.state.value.discountedFare)}",
-                            style = MaterialTheme.typography.displayLarge.copy(
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        // Enhanced fare display
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "৳ ${translateNumber(viewModel.state.value.discountedFare)}",
+                                style = MaterialTheme.typography.displayLarge.copy(
+                                    fontWeight = FontWeight.ExtraBold
+                                ),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            // Show original fare if different (discount applied)
+                            if (viewModel.state.value.calculatedFare != viewModel.state.value.discountedFare) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = "৳ ${translateNumber(viewModel.state.value.calculatedFare)}",
+                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            fontWeight = FontWeight.Medium
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
+                                    Card(
+                                        shape = RoundedCornerShape(8.dp),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f)
+                                        )
+                                    ) {
+                                        Text(
+                                            text = "MRT Discount",
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontWeight = FontWeight.Medium
+                                            ),
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                    // Balance/Status section
+                    // Enhanced Balance/Status section
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = when (uiState.cardState) {
                                 is CardState.Balance -> {
                                     val balance = uiState.cardState.amount
                                     if (balance >= uiState.calculatedFare) {
-                                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
                                     } else {
-                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f)
+                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
                                     }
                                 }
-                                else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
                             }
                         ),
-                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(20.dp),
+                                .padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             when (uiState.cardState) {
                                 is CardState.Balance -> {
                                     val balance = uiState.cardState.amount
                                     if (balance >= uiState.calculatedFare) {
+                                        // Sufficient balance - show positive feedback
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.CheckCircle,
+                                                contentDescription = "Sufficient balance",
+                                                tint = MaterialTheme.colorScheme.primary,
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Text(
+                                                text = "${stringResource(Res.string.balanceAmount)} ৳ ${translateNumber(balance)}",
+                                                style = MaterialTheme.typography.titleMedium.copy(
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+
                                         val roundTrips = if (uiState.calculatedFare > 0) balance / (uiState.discountedFare * 2) else 0
-
-                                        Text(
-                                            text = "${stringResource(Res.string.balanceAmount)} ৳ ${translateNumber(balance)}",
-                                            style = MaterialTheme.typography.titleMedium.copy(
-                                                fontWeight = FontWeight.SemiBold
-                                            ),
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-
                                         if (roundTrips > 0) {
-                                            Spacer(modifier = Modifier.height(8.dp))
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.Center
+                                            Spacer(modifier = Modifier.height(12.dp))
+                                            Card(
+                                                shape = RoundedCornerShape(16.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                                )
                                             ) {
-                                                Icon(
-                                                    painter = painterResource(Res.drawable.two_way_arrows),
-                                                    contentDescription = "Round trips",
-                                                    tint = MaterialTheme.colorScheme.primary,
-                                                    modifier = Modifier.size(16.dp)
-                                                )
-                                                Spacer(modifier = Modifier.width(6.dp))
-                                                Text(
-                                                    text = "${translateNumber(roundTrips)} ${stringResource(Res.string.roundTrips)}",
-                                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                                        fontWeight = FontWeight.Medium
-                                                    ),
-                                                    color = MaterialTheme.colorScheme.primary
-                                                )
+                                                Row(
+                                                    modifier = Modifier.padding(16.dp),
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                                ) {
+                                                    Icon(
+                                                        painter = painterResource(Res.drawable.two_way_arrows),
+                                                        contentDescription = "Round trips",
+                                                        tint = MaterialTheme.colorScheme.primary,
+                                                        modifier = Modifier.size(18.dp)
+                                                    )
+                                                    Text(
+                                                        text = "${translateNumber(roundTrips)} ${stringResource(Res.string.roundTrips)}",
+                                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                                            fontWeight = FontWeight.SemiBold
+                                                        ),
+                                                        color = MaterialTheme.colorScheme.primary
+                                                    )
+                                                }
                                             }
                                         }
                                     } else {
-                                        Text(
-                                            text = "${stringResource(Res.string.yourBalance)} (৳ $balance)",
-                                            style = MaterialTheme.typography.titleMedium.copy(
-                                                fontWeight = FontWeight.Medium
-                                            ),
-                                            color = MaterialTheme.colorScheme.error,
-                                            textAlign = TextAlign.Center
-                                        )
+                                        // Insufficient balance - show warning
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Warning,
+                                                contentDescription = "Insufficient balance",
+                                                tint = MaterialTheme.colorScheme.error,
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Column(
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Text(
+                                                    text = "${stringResource(Res.string.yourBalance)} ৳ ${translateNumber(balance)}",
+                                                    style = MaterialTheme.typography.titleMedium.copy(
+                                                        fontWeight = FontWeight.Bold
+                                                    ),
+                                                    color = MaterialTheme.colorScheme.error,
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    text = "Need ৳ ${translateNumber(uiState.calculatedFare - balance)} more",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+                                                    textAlign = TextAlign.Center
+                                                )
+                                            }
+                                        }
                                     }
                                 }
 
                                 else -> {
+                                    // No card detected - show single ticket info
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Text(
-                                            text = "${stringResource(Res.string.singleTicket)} ৳ ${
-                                                translateNumber(uiState.calculatedFare)
-                                            }",
-                                            style = MaterialTheme.typography.titleLarge.copy(
-                                                fontWeight = FontWeight.SemiBold
-                                            ),
-                                            textAlign = TextAlign.Center,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.MonetizationOn,
+                                                contentDescription = "Single ticket",
+                                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Text(
+                                                text = "${stringResource(Res.string.singleTicket)} ৳ ${translateNumber(uiState.calculatedFare)}",
+                                                style = MaterialTheme.typography.titleLarge.copy(
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                textAlign = TextAlign.Center,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
                                             text = stringResource(Res.string.tapToCheckSufficientBalance),
@@ -526,5 +781,299 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun TravelInfoCard(uiState: FareCalculatorState) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // Header
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Card(
+                    modifier = Modifier.size(40.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Timeline,
+                            contentDescription = "Journey Info",
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+
+                Column {
+                    Text(
+                        text = "Journey Information",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Travel details and estimates",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            // Journey details
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Route information
+                InfoRow(
+                    icon = Icons.Default.Route,
+                    title = "Route",
+                    value = "${uiState.fromStation?.let { StationService.translate(it.name) }} → ${
+                        uiState.toStation?.let { StationService.translate(it.name) }
+                    }",
+                    iconColor = MaterialTheme.colorScheme.primary
+                )
+
+                // Estimated time (placeholder - replace with actual calculation)
+                InfoRow(
+                    icon = Icons.Default.AccessTime,
+                    title = "Estimated Time",
+                    value = "15-20 minutes",
+                    iconColor = MaterialTheme.colorScheme.secondary
+                )
+
+                // Distance (placeholder - replace with actual calculation)
+                InfoRow(
+                    icon = Icons.Default.Timeline,
+                    title = "Distance",
+                    value = "~12 km",
+                    iconColor = MaterialTheme.colorScheme.tertiary
+                )
+
+                // Savings with MRT card
+                if (uiState.calculatedFare != uiState.discountedFare) {
+                    InfoRow(
+                        icon = Icons.Default.Savings,
+                        title = "MRT Card Savings",
+                        value = "৳ ${translateNumber(uiState.calculatedFare - uiState.discountedFare)}",
+                        iconColor = MaterialTheme.colorScheme.primary,
+                        highlight = true
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun InfoRow(
+    icon: ImageVector,
+    title: String,
+    value: String,
+    iconColor: Color,
+    highlight: Boolean = false
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (highlight) {
+                iconColor.copy(alpha = 0.1f)
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            }
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Card(
+                modifier = Modifier.size(32.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = iconColor.copy(alpha = 0.15f)
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = title,
+                        tint = iconColor,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = if (highlight) FontWeight.Bold else FontWeight.SemiBold
+                    ),
+                    color = if (highlight) iconColor else MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun QuickTipsCard() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // Header
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Card(
+                    modifier = Modifier.size(40.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f)
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Lightbulb,
+                            contentDescription = "Tips",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+
+                Column {
+                    Text(
+                        text = "Travel Tips",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Smart commuting advice",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            // Tips
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                TipItem(
+                    icon = Icons.Default.AccountBalanceWallet,
+                    text = "Use MRT Pass for discounted fares and faster boarding",
+                    iconColor = MaterialTheme.colorScheme.primary
+                )
+
+                TipItem(
+                    icon = Icons.Default.AccessTime,
+                    text = "Avoid peak hours (8-10 AM, 5-7 PM) for comfortable travel",
+                    iconColor = MaterialTheme.colorScheme.secondary
+                )
+
+                TipItem(
+                    icon = Icons.Default.TrendingUp,
+                    text = "Check your card balance regularly to avoid delays",
+                    iconColor = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TipItem(
+    icon: ImageVector,
+    text: String,
+    iconColor: Color
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Card(
+            modifier = Modifier.size(24.dp),
+            shape = RoundedCornerShape(6.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = iconColor.copy(alpha = 0.15f)
+            )
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(12.dp)
+                )
+            }
+        }
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            modifier = Modifier.weight(1f)
+        )
     }
 }
