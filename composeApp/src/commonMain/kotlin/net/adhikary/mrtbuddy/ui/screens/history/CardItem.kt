@@ -103,13 +103,13 @@ fun CardItem(
             .scale(animatedScale)
             .shadow(
                 elevation = 12.dp,
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(10.dp),
                 ambientColor = cardColor.copy(alpha = 0.1f),
                 spotColor = cardColor.copy(alpha = 0.25f)
             )
             .clickable { onCardSelected() },
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )

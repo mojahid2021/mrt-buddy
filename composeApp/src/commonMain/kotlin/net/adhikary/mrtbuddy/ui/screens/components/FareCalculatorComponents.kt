@@ -192,7 +192,7 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
                         .clickable(enabled = uiState.fromStation != null && uiState.toStation != null) {
                             // viewModel.onAction(FareCalculatorAction.SwapStations)
                         },
-                    shape = CircleShape,
+//                    shape = CircleShape,
                     colors = CardDefaults.cardColors(
                         containerColor = if (uiState.fromStation != null && uiState.toStation != null) {
                             MaterialTheme.colorScheme.primary
@@ -342,19 +342,28 @@ fun StationDropdownField(
                 modifier = Modifier
                     .background(
                         MaterialTheme.colorScheme.surface,
-                        RoundedCornerShape(16.dp)
+                        RoundedCornerShape(0.dp)
                     )
                     .padding(vertical = 8.dp)
             ) {
                 stations.forEach { station ->
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                text = StationService.translate(station.name),
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.Medium
+                            Column {
+                                Text(
+                                    text = StationService.translate(station.name),
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = FontWeight.Medium
+                                    )
                                 )
-                            )
+                                androidx.compose.material3.Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp),
+                                    thickness = 1.dp,
+                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                )
+                            }
                         },
                         onClick = { onStationSelected(station) },
                         modifier = Modifier.padding(horizontal = 8.dp)
@@ -382,16 +391,6 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-//                    .background(
-//                        Brush.radialGradient(
-//                            colors = listOf(
-//                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
-//                                MaterialTheme.colorScheme.surface,
-//                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.08f)
-//                            ),
-//                            radius = 800f
-//                        )
-//                    )
             ) {
                 Column(
                     modifier = Modifier

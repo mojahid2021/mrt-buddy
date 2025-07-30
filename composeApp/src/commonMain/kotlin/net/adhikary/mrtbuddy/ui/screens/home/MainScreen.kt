@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,7 +74,17 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import kotlinx.datetime.LocalDateTime
 
+
+//TimeFormatter function to format LocalDateTime to AM/PM format
+fun formatTimeAMPM(dateTime: LocalDateTime): String {
+    val hour = dateTime.hour % 12
+    val displayHour = if (hour == 0) 12 else hour
+    val minute = dateTime.minute
+    val amPm = if (dateTime.hour < 12) "AM" else "PM"
+    return "${displayHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} $amPm"
+}
 enum class Screen(val title: StringResource) {
     Home(title = Res.string.balance),
     Calculator(title = Res.string.fare),
@@ -212,7 +223,7 @@ private fun ModernNavigationBar(
             tonalElevation = 0.dp,
             containerColor = Color.Transparent,
             modifier = Modifier
-                .height(60.dp) // Set a minimum height for better touch targets
+                .wrapContentSize() // Set a minimum height for better touch targets
                 .padding(
                     horizontal = 0.dp,
                     vertical = 0.dp
@@ -361,7 +372,7 @@ private fun ModernHomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 15.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // Welcome section with modern styling - Fixed at top
@@ -489,7 +500,7 @@ private fun ModernHomeScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     val validTransactions = uiState.transactionWithAmount
@@ -532,11 +543,24 @@ private fun ModernTransactionItem(
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text = "${transaction.transaction.timestamp.dayOfMonth}/${transaction.transaction.timestamp.monthNumber}/${transaction.transaction.timestamp.year}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+                Row(
+                    modifier = Modifier.padding(top = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "${transaction.transaction.timestamp.dayOfMonth}/${transaction.transaction.timestamp.monthNumber}/${transaction.transaction.timestamp.year}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = formatTimeAMPM(transaction.transaction.timestamp),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Light
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
             }
 
             Column(horizontalAlignment = Alignment.End) {

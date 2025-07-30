@@ -113,7 +113,7 @@ fun FareCalculatorScreen(
     ) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+            contentPadding = PaddingValues(horizontal = 5.dp, vertical = 0.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item(key = "header") {
