@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -537,15 +538,16 @@ fun CardItem(
                     )
             )
 
-            // MRT Buddy watermark - Better positioning
+
+            // MRT Buddy watermark - Bank card style typography
             Text(
                 text = "MRT BUDDY",
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 1.sp,
-                    fontFamily = FontFamily.Monospace
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 3.sp,
+                    fontFamily = FontFamily.SansSerif
                 ),
-                color = Color.White.copy(alpha = 0.1f),
+                color = Color.White.copy(alpha = 0.08f),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(12.dp)
