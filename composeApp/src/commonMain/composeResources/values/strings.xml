@@ -67,6 +67,7 @@
     <string name="selectDestination">Select Destination Station</string>
     <string name="roundTrips">x Round Trip(s)</string>
     <string name="balanceAmount">Balance</string>
+    <string name="need_more_amount">Need ৳ %s more</string>
 
     <!-- more screen -->
     <string name="aboutHeader">About</string>

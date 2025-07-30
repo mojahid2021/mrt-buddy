@@ -2,6 +2,9 @@ package net.adhikary.mrtbuddy.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Transparent = Color(0x00000000)
+
+
 // Light Theme Colors
 val LightRapidPass = Color(0xFF2196F3)  // Blue color for Rapid Pass
 val LightMRTPass = Color(0xFF408E2D)  // Green color for MRT Pass

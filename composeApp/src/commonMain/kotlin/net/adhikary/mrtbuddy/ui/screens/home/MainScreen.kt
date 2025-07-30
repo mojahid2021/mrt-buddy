@@ -2,6 +2,7 @@ package net.adhikary.mrtbuddy.ui.screens.home
 
 import MoreScreen
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,11 +62,13 @@ import net.adhikary.mrtbuddy.ui.components.BalanceCard
 import net.adhikary.mrtbuddy.ui.components.CalculatorIcon
 import net.adhikary.mrtbuddy.ui.components.CardIcon
 import net.adhikary.mrtbuddy.ui.components.HistoryIcon
+import net.adhikary.mrtbuddy.ui.components.TransactionHistoryList
 import net.adhikary.mrtbuddy.ui.screens.farecalculator.FareCalculatorScreen
 import net.adhikary.mrtbuddy.ui.screens.history.HistoryScreen
 import net.adhikary.mrtbuddy.ui.screens.licenses.OpenSourceLicensesScreen
 import net.adhikary.mrtbuddy.ui.screens.stationmap.StationMapScreen
 import net.adhikary.mrtbuddy.ui.screens.transactionlist.TransactionListScreen
+import net.adhikary.mrtbuddy.ui.theme.MRTBuddyTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -87,101 +90,103 @@ fun MainScreen(
     viewModel: MainScreenViewModel = koinViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    val uiState by viewModel.state.collectAsState()
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = Screen.valueOf(
-        backStackEntry?.destination?.route ?: Screen.Home.name
-    )
-    var selectedCardIdm by remember { mutableStateOf<String?>(null) }
-    val hasTransactions = uiState.transaction.isNotEmpty()
+    MRTBuddyTheme {
+        val uiState by viewModel.state.collectAsState()
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val currentScreen = Screen.valueOf(
+            backStackEntry?.destination?.route ?: Screen.Home.name
+        )
+        var selectedCardIdm by remember { mutableStateOf<String?>(null) }
+        val hasTransactions = uiState.transaction.isNotEmpty()
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.05f)
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surface,
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.05f)
+                        )
                     )
-                )
-            ),
-        bottomBar = {
-            if (currentScreen != Screen.StationMap) {
-                ModernNavigationBar(currentScreen, navController)
+                ),
+            bottomBar = {
+                if (currentScreen != Screen.StationMap) {
+                    ModernNavigationBar(currentScreen, navController)
+                }
             }
-        }
-    ) { paddingValues ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.name,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            composable(route = Screen.Home.name) {
-                ModernHomeScreen(
-                    uiState = uiState,
-                    hasTransactions = hasTransactions,
-                    paddingValues = paddingValues
-                )
-            }
+        ) { paddingValues ->
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Home.name,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                composable(route = Screen.Home.name) {
+                    ModernHomeScreen(
+                        uiState = uiState,
+                        hasTransactions = hasTransactions,
+                        paddingValues = paddingValues
+                    )
+                }
 
-            composable(route = Screen.Calculator.name) {
-                FareCalculatorScreen(
-                    cardState = uiState.cardState,
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+                composable(route = Screen.Calculator.name) {
+                    FareCalculatorScreen(
+                        cardState = uiState.cardState,
+                        modifier = Modifier.padding(paddingValues)
+                    )
+                }
 
-            composable(route = Screen.More.name) {
-                MoreScreen(
-                    onNavigateToStationMap = {
-                        navController.navigate(Screen.StationMap.name)
-                    },
-                    onNavigateToLicenses = {
-                        navController.navigate(Screen.Licenses.name)
-                    },
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+                composable(route = Screen.More.name) {
+                    MoreScreen(
+                        onNavigateToStationMap = {
+                            navController.navigate(Screen.StationMap.name)
+                        },
+                        onNavigateToLicenses = {
+                            navController.navigate(Screen.Licenses.name)
+                        },
+                        modifier = Modifier.padding(paddingValues)
+                    )
+                }
 
-            composable(route = Screen.History.name) {
-                HistoryScreen(
-                    onCardSelected = { cardIdm ->
-                        selectedCardIdm = cardIdm
-                        navController.navigate(Screen.TransactionList.name)
-                    },
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+                composable(route = Screen.History.name) {
+                    HistoryScreen(
+                        onCardSelected = { cardIdm ->
+                            selectedCardIdm = cardIdm
+                            navController.navigate(Screen.TransactionList.name)
+                        },
+                        modifier = Modifier.padding(paddingValues)
+                    )
+                }
 
-            composable(route = Screen.TransactionList.name) {
-                selectedCardIdm?.let { cardIdm ->
-                    TransactionListScreen(
-                        cardIdm = cardIdm,
+                composable(route = Screen.TransactionList.name) {
+                    selectedCardIdm?.let { cardIdm ->
+                        TransactionListScreen(
+                            cardIdm = cardIdm,
+                            onBack = {
+                                navController.navigateUp()
+                            },
+                            paddingValues = paddingValues
+                        )
+                    }
+                }
+
+                composable(route = Screen.StationMap.name) {
+                    StationMapScreen(
+                        onBack = {
+                            navController.navigateUp()
+                        },
+                    )
+                }
+
+                composable(route = Screen.Licenses.name) {
+                    OpenSourceLicensesScreen(
                         onBack = {
                             navController.navigateUp()
                         },
                         paddingValues = paddingValues
                     )
                 }
-            }
-
-            composable(route = Screen.StationMap.name) {
-                StationMapScreen(
-                    onBack = {
-                        navController.navigateUp()
-                    },
-                )
-            }
-
-            composable(route = Screen.Licenses.name) {
-                OpenSourceLicensesScreen(
-                    onBack = {
-                        navController.navigateUp()
-                    },
-                    paddingValues = paddingValues
-                )
             }
         }
     }
@@ -207,8 +212,11 @@ private fun ModernNavigationBar(
             tonalElevation = 0.dp,
             containerColor = Color.Transparent,
             modifier = Modifier
-                .height(70.dp) // Set a minimum height for better touch targets
-                .padding(horizontal = 0.dp, vertical = 0.dp) // Remove extra padding for a tighter fit
+                .height(60.dp) // Set a minimum height for better touch targets
+                .padding(
+                    horizontal = 0.dp,
+                    vertical = 0.dp
+                ) // Remove extra padding for a tighter fit
         ) {
             NavigationBarItem(
                 icon = {
@@ -329,11 +337,13 @@ private fun ModernNavIcon(
 ) {
     Box(
         modifier = Modifier
-            .size(36.dp)
             .clip(CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        val iconColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        val iconColor =
+            if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                alpha = 0.7f
+            )
         CompositionLocalProvider(LocalContentColor provides iconColor) {
             icon()
         }
@@ -344,7 +354,8 @@ private fun ModernNavIcon(
 private fun ModernHomeScreen(
     uiState: MainScreenState,
     hasTransactions: Boolean,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+
 ) {
     Column(
         modifier = Modifier
@@ -447,14 +458,16 @@ private fun ModernHomeScreen(
                         containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text(
-                        text = "View All",
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    )
+//                    Text(
+//                        text = "View All",
+//                        modifier = Modifier
+//                            .padding(horizontal = 12.dp, vertical = 6.dp),
+//                        style = MaterialTheme.typography.labelMedium.copy(
+//                            fontWeight = FontWeight.Medium,
+//                            color = MaterialTheme.colorScheme.primary
+//                        )
+//
+//                    )
                 }
             }
 
@@ -463,7 +476,7 @@ private fun ModernHomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f), // Takes remaining space
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
