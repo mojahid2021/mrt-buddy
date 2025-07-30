@@ -370,7 +370,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(320.dp), // Increased height for better content layout
+            .wrapContentSize(), // Increased height for better content layout
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
@@ -382,16 +382,16 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
-                                MaterialTheme.colorScheme.surface,
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.08f)
-                            ),
-                            radius = 800f
-                        )
-                    )
+//                    .background(
+//                        Brush.radialGradient(
+//                            colors = listOf(
+//                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
+//                                MaterialTheme.colorScheme.surface,
+//                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.08f)
+//                            ),
+//                            radius = 800f
+//                        )
+//                    )
             ) {
                 Column(
                     modifier = Modifier
@@ -402,22 +402,28 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                 ) {
                     // Animated icon container
                     Card(
-                        modifier = Modifier.size(96.dp),
+                        modifier = Modifier
+                            .size(96.dp),
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
-                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+                        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.5.dp)
                     ) {
                         Box(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    color = Transparent
+                                ),
+
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.DirectionsTransit,
                                 contentDescription = "Select stations",
                                 modifier = Modifier.size(48.dp),
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = MaterialTheme.colorScheme.background
                             )
                         }
                     }
@@ -480,13 +486,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                                MaterialTheme.colorScheme.surface,
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.03f)
-                            )
-                        )
+                        color = Transparent
                     )
             ) {
                 // Rescan button (if not Android)
@@ -527,13 +527,19 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(28.dp),
+                        .padding(28.dp)
+                        .background(
+                            color = Transparent
+                        ),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     // Enhanced header section
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .background(
+                                color = Transparent
+                            ),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -704,12 +710,6 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.Center
                                         ) {
-//                                            Icon(
-//                                                imageVector = Icons.Default.Warning,
-//                                                contentDescription = "Insufficient balance",
-//                                                tint = MaterialTheme.colorScheme.error,
-//                                                modifier = Modifier.size(20.dp)
-//                                            )
                                             Column(
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
@@ -726,7 +726,9 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                     textAlign = TextAlign.Center
                                                 )
                                                 Text(
-                                                    text = "Need ৳ ${translateNumber(uiState.calculatedFare - balance)} more",
+//                                                    text = "Need ৳ ${translateNumber(uiState.calculatedFare - balance)} more",
+                                                    text = "Need ৳ ${translateNumber(viewModel.state.value.discountedFare - balance)} more",
+
                                                     style = MaterialTheme.typography.bodyMedium.copy(
                                                         fontSize = 18.sp,
                                                         fontWeight = FontWeight.SemiBold
@@ -792,7 +794,6 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                             }
                         }
                     }
-
 
 
                 }
