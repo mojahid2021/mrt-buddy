@@ -365,7 +365,11 @@ fun TransactionListScreen(
                             // Transactions list
                             items(
                                 items = uiState.transactions,
-                                key = { "${it.transactionEntity.dateTime}_${it.transactionEntity.fromStation}_${it.transactionEntity.toStation}" }
+                                key = { transaction ->
+                                    // Use a unique key: fallback to hashCode if no unique id
+                                    val baseKey = "${transaction.transactionEntity.dateTime}_${transaction.transactionEntity.fromStation}_${transaction.transactionEntity.toStation}"
+                                    baseKey + "_" + transaction.hashCode()
+                                }
                             ) { transaction ->
                                 AnimatedVisibility(
                                     visible = true,
