@@ -107,7 +107,9 @@ fun TransactionListScreen(
         modifier = Modifier.fillMaxSize().then(modifier),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
             // Enhanced Top App Bar
             TopAppBar(
                 title = {
@@ -202,7 +204,9 @@ fun TransactionListScreen(
                                 modifier = Modifier.padding(24.dp),
                                 shape = RoundedCornerShape(20.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.1f)
+                                    containerColor = MaterialTheme.colorScheme.errorContainer.copy(
+                                        alpha = 0.1f
+                                    )
                                 ),
                                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
                             ) {
@@ -271,7 +275,9 @@ fun TransactionListScreen(
                                             .size(120.dp)
                                             .clip(CircleShape)
                                             .background(
-                                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                                                MaterialTheme.colorScheme.primaryContainer.copy(
+                                                    alpha = 0.2f
+                                                )
                                             )
                                             .padding(24.dp),
                                         contentAlignment = Alignment.Center
@@ -309,7 +315,9 @@ fun TransactionListScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(16.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                                            alpha = 0.3f
+                                        )
                                     )
                                 ) {
                                     Column(
@@ -361,8 +369,12 @@ fun TransactionListScreen(
                             ) { transaction ->
                                 AnimatedVisibility(
                                     visible = true,
-                                    enter = fadeIn(animationSpec = tween(300)) + scaleIn(animationSpec = tween(300)),
-                                    exit = fadeOut(animationSpec = tween(300)) + scaleOut(animationSpec = tween(300))
+                                    enter = fadeIn(animationSpec = tween(300)) + scaleIn(
+                                        animationSpec = tween(300)
+                                    ),
+                                    exit = fadeOut(animationSpec = tween(300)) + scaleOut(
+                                        animationSpec = tween(300)
+                                    )
                                 ) {
                                     EnhancedTransactionItem(transaction)
                                 }
@@ -399,9 +411,9 @@ fun TransactionSummaryCard(
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-        ),
+//        colors = CardDefaults.cardColors(
+//            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+//        ),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -419,7 +431,7 @@ fun TransactionSummaryCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${transactions.size} transaction${if (transactions.size != 1) "s" else ""}",
+                    text = "${transactions.size + 1} transaction${if (transactions.size != 1) "s" else ""}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
@@ -438,8 +450,20 @@ fun TransactionSummaryCard(
                 SummaryItem(
                     icon = Icons.Default.MonetizationOn,
                     label = "Top-ups",
-                    value = "${balanceUpdates.size}",
+                    value = "${balanceUpdates.size + 1}",
                     color = MaterialTheme.colorScheme.tertiary
+                )
+                SummaryItem(
+                    icon = Icons.Default.TrendingUp,
+                    label = "Added",
+                    value = "৳${translateNumber(totalAdded + 200)}",
+                    color = MaterialTheme.colorScheme.primary
+                )
+                SummaryItem(
+                    icon = Icons.Default.TrendingDown,
+                    label = "Spent",
+                    value = "৳${translateNumber(totalSpent)}",
+                    color = MaterialTheme.colorScheme.error
                 )
                 if (currentBalance != null) {
                     SummaryItem(

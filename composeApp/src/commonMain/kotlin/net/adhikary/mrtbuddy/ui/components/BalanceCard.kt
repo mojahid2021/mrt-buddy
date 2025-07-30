@@ -33,6 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Contactless
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NearMe
@@ -599,7 +600,7 @@ private fun ModernWaitingContent() {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.TapAndPlay,
+                    imageVector = Icons.Default.Contactless,
                     contentDescription = "Tap Card",
                     modifier = Modifier.size(50.dp),
                     tint = MaterialTheme.colorScheme.primary
@@ -631,6 +632,7 @@ private fun ModernWaitingContent() {
                 lineHeight = MaterialTheme.typography.titleMedium.lineHeight
             )
         }
+        // Modern instruction card with enhanced design
 
         // Enhanced instruction card with icon
         Card(
@@ -704,7 +706,7 @@ private fun ModernErrorContent(message: String) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "❌ Scan Failed",
+                text = "Scan Failed",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),

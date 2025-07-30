@@ -456,7 +456,11 @@ private fun ModernHomeScreen(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    )
+                    ),
+                    modifier = Modifier.clickable {
+                        // Handle click here
+
+                    }
                 ) {
 //                    Text(
 //                        text = "View All",
