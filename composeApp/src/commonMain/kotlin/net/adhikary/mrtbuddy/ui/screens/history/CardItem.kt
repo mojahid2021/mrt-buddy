@@ -74,6 +74,9 @@ import net.adhikary.mrtbuddy.ui.theme.DarkMRTPass
 import net.adhikary.mrtbuddy.ui.theme.DarkRapidPass
 import net.adhikary.mrtbuddy.ui.theme.LightMRTPass
 import net.adhikary.mrtbuddy.ui.theme.LightRapidPass
+import net.adhikary.mrtbuddy.ui.theme.Transparent
+import net.adhikary.mrtbuddy.ui.theme.white80
+import net.adhikary.mrtbuddy.ui.theme.white98
 import net.adhikary.mrtbuddy.utils.TimeUtils
 import net.adhikary.mrtbuddy.utils.isRapidPassIdm
 import org.jetbrains.compose.resources.stringResource
@@ -109,16 +112,33 @@ fun CardItem(
         if (isDarkTheme) DarkMRTPass else LightMRTPass
     }
 
-    val cardGradient = Brush.linearGradient(
-        colors = listOf(
-            cardColor.copy(alpha = 0.95f),
-            cardColor,
-            cardColor.copy(alpha = 0.85f),
-            cardColor.copy(alpha = 0.9f)
-        ),
-        start = Offset(0f, 0f),
-        end = Offset(1200f, 600f)
-    )
+    // Enhanced card gradient with better color transitions
+    val cardGradient = if (isRapidPass) {
+        // Rapid Pass: navy blue, deep sky blue, light sky blue, red
+        Brush.linearGradient(
+            colors = listOf(
+                Color(0xFF001F3F), // navy blue
+                Color(0xFF1877F2), // deep sky blue
+                Color(0xFF56CCF2), // light sky blue
+                Color(0xFFFF3B30)  // red
+            ),
+            start = Offset(0f, 0f),
+            end = Offset(1200f, 600f)
+        )
+    } else {
+        // MRT Pass: deep green, teal, light sky blue, red
+        Brush.linearGradient(
+            colors = listOf(
+                Color(0xFF006400), // deep green
+                Color(0xFF009688), // teal
+                Color(0xFF56CCF2), // light sky blue
+                Color(0xFFFF3B30)  // red
+            ),
+            start = Offset(0f, 0f),
+            end = Offset(1200f, 600f)
+        )
+    }
+
 
     // Smooth animations
     val animatedScale by animateFloatAsState(
@@ -158,25 +178,14 @@ fun CardItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-                .background(cardGradient)
+                .background(cardColor)
         ) {
             // Enhanced card texture with MRT patterns
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                Color.White.copy(alpha = 0.15f),
-                                Color.Transparent,
-                                Color.Black.copy(alpha = 0.08f),
-                                Color.White.copy(alpha = 0.05f)
-                            ),
-                            radius = 400f,
-                            center = Offset(150f, 60f)
-                        )
-                    )
+                    .background(Color.Transparent)
             )
 
             // Menu - Fixed positioning
@@ -184,9 +193,13 @@ fun CardItem(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
+                    .background(
+                        color = Transparent
+                    )
             ) {
                 Surface(
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier
+                        .size(32.dp),
                     shape = CircleShape,
                     color = Color.White.copy(alpha = 0.25f)
                 ) {
@@ -237,21 +250,24 @@ fun CardItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(Color.Transparent)
                     .height(200.dp)
                     .padding(20.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 // Header section
                 Column(
+                    modifier = Modifier.background(Color.Transparent),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     // Card type with status indicators
                     Row(
+                        modifier = Modifier.background(Color.Transparent),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = if (isRapidPass) "RAPIDPASS" else "MRT PASS",
+                            text = if (isRapidPass) "RAPID PASS" else "MRT PASS",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 1.sp,
@@ -264,6 +280,7 @@ fun CardItem(
                         when {
                             isVeryLowBalance -> {
                                 Surface(
+                                    modifier = Modifier.background(Color.Transparent),
                                     shape = RoundedCornerShape(3.dp),
                                     color = Color.Red
                                 ) {
@@ -274,25 +291,11 @@ fun CardItem(
                                             letterSpacing = 0.5.sp
                                         ),
                                         color = Color.White,
-                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                                        modifier = Modifier
+                                            .background(Color.Transparent)
+                                            .padding(horizontal = 4.dp, vertical = 1.dp)
                                     )
                                 }
-                            }
-                            isCriticalBalance -> {
-                                Icon(
-                                    imageVector = Icons.Default.Warning,
-                                    contentDescription = "Critical balance",
-                                    tint = Color.Red,
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            }
-                            isLowBalance -> {
-                                Icon(
-                                    imageVector = Icons.Default.Warning,
-                                    contentDescription = "Low balance",
-                                    tint = Color.Yellow,
-                                    modifier = Modifier.size(14.dp)
-                                )
                             }
                         }
 
@@ -318,61 +321,92 @@ fun CardItem(
                     )
                 }
 
-                // Balance section
-                if (balance != null) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(
-                            text = "BALANCE",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Medium,
-                                letterSpacing = 1.sp,
-                                fontFamily = FontFamily.Monospace
-                            ),
-                            color = Color.White.copy(alpha = 0.8f)
-                        )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                // Balance section with contactless icon always visible
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Transparent),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (balance != null) {
+                        Column(
+                            modifier = Modifier.background(Color.Transparent),
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             Text(
-                                text = "৳ $balance",
-                                style = MaterialTheme.typography.headlineLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 26.sp,
+                                text = "BALANCE",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 1.sp,
                                     fontFamily = FontFamily.Monospace
                                 ),
-                                color = when {
-                                    isVeryLowBalance -> Color.Red
-                                    isLowBalance -> Color.Yellow
-                                    else -> Color.White
-                                }
+                                color = Color.White.copy(alpha = 0.8f)
                             )
-                            if (isLowBalance) {
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Surface(
-                                    shape = RoundedCornerShape(4.dp),
-                                    color = if (isVeryLowBalance) Color.Red else Color.Yellow
-                                ) {
-                                    Text(
-                                        text = if (isVeryLowBalance) "CRITICAL" else "LOW",
-                                        style = MaterialTheme.typography.labelSmall.copy(
-                                            fontWeight = FontWeight.Bold,
-                                            letterSpacing = 0.5.sp
-                                        ),
-                                        color = if (isVeryLowBalance) Color.White else Color.Black,
-                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                    )
+                            Row(
+                                modifier = Modifier.background(Color.Transparent),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "৳ $balance",
+                                    style = MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 26.sp,
+                                        fontFamily = FontFamily.Monospace
+                                    ),
+                                    color = when {
+                                        isVeryLowBalance -> Color.Red
+                                        isLowBalance -> Color.Yellow
+                                        else -> Color.White
+                                    }
+                                )
+                                if (isLowBalance) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Surface(
+                                        modifier = Modifier.background(Color.Transparent),
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = if (isVeryLowBalance) Color.Red else Color.Yellow
+                                    ) {
+                                        Text(
+                                            text = if (isVeryLowBalance) "CRITICAL" else "LOW",
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                letterSpacing = 0.5.sp
+                                            ),
+                                            color = if (isVeryLowBalance) Color.White else Color.Black,
+                                            modifier = Modifier.background(Color.Transparent)
+                                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                    // Contactless icon always visible with 50dp size and background
+                    Surface(
+                        modifier = Modifier.size(30.dp),
+                        shape = CircleShape,
+                        color = Color.White.copy(alpha = 0.3f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Contactless,
+                            contentDescription = "Contactless",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(30.dp)
+                                .alpha(0.5f) // 50% opacity
+
+                        )
                     }
                 }
 
-
                 // Bottom section - Card details
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Transparent),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom
                 ) {
@@ -380,6 +414,7 @@ fun CardItem(
                     Column(
                         modifier = Modifier
                             .weight(1f)
+                            .background(Color.Transparent)
                             .clickable { isIdVisible = !isIdVisible },
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
@@ -427,20 +462,42 @@ fun CardItem(
 
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    // Last scan
+                    // Last scan with contactless icon on top-right
                     Column(
+                        modifier = Modifier.background(Color.Transparent),
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        Text(
-                            text = "LAST SCAN",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Medium,
-                                letterSpacing = 1.sp,
-                                fontFamily = FontFamily.Monospace
-                            ),
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
+                        Row(
+                            modifier = Modifier.background(Color.Transparent),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = "LAST SCAN",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 1.sp,
+                                    fontFamily = FontFamily.Monospace
+                                ),
+                                color = Color.White.copy(alpha = 0.7f)
+                            )
+                            // Contactless icon on top-right of Last Scan with background
+//                            Surface(
+//                                modifier = Modifier.size(16.dp),
+//                                shape = CircleShape,
+//                                color = Color.White.copy(alpha = 0.3f)
+//                            ) {
+//                                Icon(
+//                                    imageVector = Icons.Default.Contactless,
+//                                    contentDescription = "Contactless",
+//                                    tint = Color.White,
+//                                    modifier = Modifier
+//                                        .size(10.dp)
+//                                        .padding(3.dp)
+//                                )
+//                            }
+                        }
                         Text(
                             text = if (card.lastScanTime != null) {
                                 TimeUtils.getTimeAgoString(card.lastScanTime)
