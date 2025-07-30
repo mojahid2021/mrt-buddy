@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -218,7 +219,7 @@ private fun EnhancedHeaderSection() {
     // Modern glass-morphism style card
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .wrapContentSize()
             .alpha(alpha)
     ) {
         // Background blur effect simulation
@@ -241,7 +242,7 @@ private fun EnhancedHeaderSection() {
                                 MaterialTheme.colorScheme.secondary.copy(alpha = 0.7f),
                                 MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)
                             ),
-                            radius = 800f,
+                            radius = 600f, // reduced from 800f
                             center = androidx.compose.ui.geometry.Offset(0.3f, 0.2f)
                         ),
                         shape = RoundedCornerShape(32.dp)
@@ -250,7 +251,7 @@ private fun EnhancedHeaderSection() {
                 // Floating decoration elements
                 Box(
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(70.dp) // reduced from 100.dp
                         .background(
                             brush = Brush.radialGradient(
                                 colors = listOf(
@@ -261,12 +262,12 @@ private fun EnhancedHeaderSection() {
                             shape = CircleShape
                         )
                         .align(Alignment.TopEnd)
-                        .padding(20.dp)
+                        .padding(12.dp) // reduced from 20.dp
                 )
 
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(40.dp) // reduced from 60.dp
                         .background(
                             brush = Brush.radialGradient(
                                 colors = listOf(
@@ -277,16 +278,16 @@ private fun EnhancedHeaderSection() {
                             shape = CircleShape
                         )
                         .align(Alignment.BottomStart)
-                        .padding(15.dp)
+                        .padding(8.dp) // reduced from 15.dp
                 )
 
                 // Main content
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp), // reduced from 20.dp
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 40.dp)
+                        .padding(horizontal = 16.dp, vertical = 24.dp) // reduced from 24,40
                 ) {
                     // Enhanced icon with multiple layers
                     Box(
@@ -296,7 +297,7 @@ private fun EnhancedHeaderSection() {
                         // Outer ring
                         Box(
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(60.dp) // reduced from 90.dp
                                 .background(
                                     brush = Brush.radialGradient(
                                         colors = listOf(
@@ -312,7 +313,7 @@ private fun EnhancedHeaderSection() {
                         // Inner circle with icon
                         Box(
                             modifier = Modifier
-                                .size(70.dp)
+                                .size(44.dp) // reduced from 70.dp
                                 .background(
                                     brush = Brush.radialGradient(
                                         colors = listOf(
@@ -328,7 +329,7 @@ private fun EnhancedHeaderSection() {
                                 imageVector = Icons.Rounded.Settings,
                                 contentDescription = null,
                                 tint = Color.White,
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(28.dp) // reduced from 40.dp
                             )
                         }
                     }
@@ -336,7 +337,7 @@ private fun EnhancedHeaderSection() {
                     // Title and subtitle with staggered animation
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp), // reduced from 12.dp
                         modifier = Modifier.alpha(titleAlpha)
                     ) {
                         Text(
@@ -345,7 +346,7 @@ private fun EnhancedHeaderSection() {
                             fontWeight = FontWeight.Black,
                             color = Color.White,
                             textAlign = TextAlign.Center,
-                            fontSize = 32.sp,
+                            fontSize = 26.sp, // reduced from 32.sp
                             letterSpacing = (-0.5).sp
                         )
                         Text(
@@ -354,8 +355,8 @@ private fun EnhancedHeaderSection() {
                             color = Color.White.copy(alpha = 0.9f),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Medium,
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp
+                            fontSize = 13.sp, // reduced from 16.sp
+                            lineHeight = 18.sp // reduced from 24.sp
                         )
 
 

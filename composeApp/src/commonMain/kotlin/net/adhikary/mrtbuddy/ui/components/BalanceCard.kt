@@ -45,6 +45,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TapAndPlay
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Contactless
+import androidx.compose.material.icons.rounded.Lightbulb
+import androidx.compose.material.icons.rounded.LightbulbCircle
+import androidx.compose.material.icons.rounded.WbIncandescent
+import androidx.compose.material.icons.rounded.WbIridescent
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -93,6 +97,8 @@ import net.adhikary.mrtbuddy.ui.theme.DarkMRTPass
 import net.adhikary.mrtbuddy.ui.theme.DarkRapidPass
 import net.adhikary.mrtbuddy.ui.theme.LightMRTPass
 import net.adhikary.mrtbuddy.ui.theme.LightRapidPass
+import net.adhikary.mrtbuddy.ui.theme.Transparent
+import net.adhikary.mrtbuddy.ui.theme.Yellow
 import net.adhikary.mrtbuddy.utils.isRapidPassIdm
 import org.jetbrains.compose.resources.stringResource
 
@@ -271,6 +277,7 @@ fun BalanceCard(
                             amount = cardState.amount,
                             hasHeader = !cardName.isNullOrBlank()
                         )
+
                         CardState.Reading -> ModernReadingContent()
                         CardState.WaitingForTap -> ModernWaitingContent()
                         is CardState.Error -> ModernErrorContent(message = cardState.message)
@@ -361,6 +368,7 @@ private fun ModernBalanceContent(
                     )
                 )
             )
+
             amount <= 70 -> Triple(
                 if (isSystemInDarkTheme()) Alert_yellow_D else Alert_yellow_L,
                 Icons.Default.Info,
@@ -371,6 +379,7 @@ private fun ModernBalanceContent(
                     )
                 )
             )
+
             else -> Triple(
                 MaterialTheme.colorScheme.primary,
                 Icons.Default.CheckCircle,
@@ -444,6 +453,7 @@ private fun ModernBalanceContent(
                     }
                 }
             }
+
             amount <= 70 -> {
                 Card(
                     colors = CardDefaults.cardColors(
@@ -463,6 +473,7 @@ private fun ModernBalanceContent(
                     )
                 }
             }
+
             else -> {
                 Card(
                     colors = CardDefaults.cardColors(
@@ -643,41 +654,45 @@ private fun ModernWaitingContent() {
         }
         // Modern instruction card with enhanced design
 
-        // Enhanced instruction card with icon
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
             ),
-            shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Row(
+            Column(
                 modifier = Modifier.padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.TapAndPlay,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.WbIncandescent,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Text(
-                        text = "💡 Pro Tip",
-                        style = MaterialTheme.typography.titleSmall.copy(
+                        text = "Tips",
+                        style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
                         color = MaterialTheme.colorScheme.primary
                     )
-                    Text(
-                        text = "Hold your card flat against the back of your phone. Keep it steady until you feel a vibration.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                    )
                 }
+
+                Text(
+                    text = "1. Hold your card against the NFC area of your device.\n2. Keep it steady until the scan completes.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                )
             }
         }
+
     }
 }
 

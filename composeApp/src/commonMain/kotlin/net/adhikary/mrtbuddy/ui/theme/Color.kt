@@ -92,3 +92,6 @@ val surfaceContainerLowDark = Color(0xFF474747)
 val surfaceContainerDark = Color(0xFF383838)
 val surfaceContainerHighDark = Color(0xFF292929)
 val surfaceContainerHighestDark = Color(0xFF292929)
+
+// Standard Material Colors
+val Yellow = Color(0xFFFFEB3B) // Standard Material yellow
