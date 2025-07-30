@@ -434,7 +434,9 @@ private fun ModernHomeScreen(
 
         // Enhanced Balance Card with modern styling - Fixed
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .wrapContentSize()
+                .fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(
@@ -445,6 +447,7 @@ private fun ModernHomeScreen(
                 cardState = uiState.cardState,
                 cardName = uiState.cardName,
                 cardIdm = uiState.cardIdm,
+                hasTransactions = hasTransactions,
                 modifier = Modifier.padding(4.dp)
             )
         }

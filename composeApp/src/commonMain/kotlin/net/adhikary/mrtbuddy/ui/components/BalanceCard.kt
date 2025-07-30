@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -100,6 +101,7 @@ fun BalanceCard(
     cardState: CardState,
     cardIdm: String? = null,
     cardName: String? = null,
+    hasTransactions: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val animatedScale by animateFloatAsState(
@@ -111,7 +113,7 @@ fun BalanceCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(320.dp) // Increased height for more spacious design
+            .wrapContentHeight()
             .scale(animatedScale)
             .shadow(
                 elevation = 16.dp,
@@ -125,7 +127,7 @@ fun BalanceCard(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxWidth().wrapContentHeight()) {
             // Enhanced gradient header for Balance state with improved design
             if (!cardName.isNullOrBlank() && cardState is CardState.Balance) {
                 val isRapidPass = cardIdm?.let { isRapidPassIdm(it) } ?: false
@@ -244,7 +246,8 @@ fun BalanceCard(
             // Main content area with improved spacing
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .wrapContentHeight()
                     .padding(
                         start = 28.dp,
                         end = 28.dp,
