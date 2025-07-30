@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -138,7 +139,7 @@ fun BalanceCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.dp) // Increased header height
+                        .wrapContentSize() // Increased header height
                         .background(
                             Brush.horizontalGradient(
                                 colors = listOf(
@@ -244,12 +245,17 @@ fun BalanceCard(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(28.dp), // Increased padding
+                    .padding(
+                        start = 28.dp,
+                        end = 28.dp,
+                        top = if (!cardName.isNullOrBlank() && cardState is CardState.Balance) 100.dp else 28.dp, // Add top padding when header is present
+                        bottom = 28.dp
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = if (cardName.isNullOrBlank() || cardState !is CardState.Balance) {
                     Arrangement.Center
                 } else {
-                    Arrangement.Bottom
+                    Arrangement.Top // Change from Bottom to Top to prevent overlap
                 }
             ) {
                 AnimatedVisibility(
@@ -826,7 +832,7 @@ private fun ModernNoNfcSupportContent() {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "ℹ️ Device Compatibility",
+                    text = "Device Compatibility",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
