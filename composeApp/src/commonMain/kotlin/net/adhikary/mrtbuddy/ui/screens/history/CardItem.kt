@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -158,7 +159,7 @@ fun CardItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .wrapContentSize()
             .padding(horizontal = 16.dp, vertical = 10.dp)
             .scale(animatedScale)
             .rotate(animatedRotation)
@@ -437,7 +438,8 @@ fun CardItem(
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Medium,
                                 fontFamily = FontFamily.Monospace,
-                                letterSpacing = 1.sp
+                                letterSpacing = 1.sp,
+                                fontSize = 14.sp
                             ),
                             color = Color.White.copy(alpha = 0.9f)
                         )

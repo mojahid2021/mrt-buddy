@@ -463,7 +463,7 @@ private fun ModernBalanceContent(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
-                        text = "💡 Consider topping up soon for uninterrupted travel",
+                        text = "💡 Recharge soon to enjoy seamless journeys!",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -482,7 +482,7 @@ private fun ModernBalanceContent(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
-                        text = "✅ Your balance looks good for multiple journeys",
+                        text = "✅ Your balance can easily cover a few more trips.",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -685,7 +685,7 @@ private fun ModernWaitingContent() {
                 }
 
                 Text(
-                    text = "1. Hold your card against the NFC area of your device.\n2. Keep it steady until the scan completes.",
+                    text = "Hold your card against the NFC area of your device and Keep it steady until the scan completes.",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)

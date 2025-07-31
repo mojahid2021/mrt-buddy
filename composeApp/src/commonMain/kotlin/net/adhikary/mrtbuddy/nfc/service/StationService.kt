@@ -16,6 +16,7 @@ import mrtbuddy.composeapp.generated.resources.motijheel
 import mrtbuddy.composeapp.generated.resources.pallabi
 import mrtbuddy.composeapp.generated.resources.shahbagh
 import mrtbuddy.composeapp.generated.resources.shewrapara
+import mrtbuddy.composeapp.generated.resources.topup
 import mrtbuddy.composeapp.generated.resources.uttaraCenter
 import mrtbuddy.composeapp.generated.resources.uttaraNorth
 import mrtbuddy.composeapp.generated.resources.uttaraSouth
@@ -23,6 +24,7 @@ import org.jetbrains.compose.resources.stringResource
 
 object StationService {
     private val stationMap = mapOf(
+        0 to "Recharge",
         10 to "Motijheel",
         20 to "Bangladesh Secretariat",
         25 to "Dhaka University",
@@ -66,6 +68,7 @@ object StationService {
             "Uttara South" -> stringResource(Res.string.uttaraSouth)
             "Uttara Center" -> stringResource(Res.string.uttaraCenter)
             "Uttara North" -> stringResource(Res.string.uttaraNorth)
+            "TopUP" -> stringResource(Res.string.topup)
             else -> "" // Default to English if no match is found
         }
     }

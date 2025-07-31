@@ -34,6 +34,9 @@ import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Percent
+import androidx.compose.material.icons.rounded.Sell
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -346,7 +349,7 @@ fun StationDropdownField(
                     )
                     .padding(vertical = 8.dp)
             ) {
-                stations.forEach { station ->
+                stations.drop(1).forEach { station ->
                     DropdownMenuItem(
                         text = {
                             Column {
@@ -761,7 +764,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                                         ) {
                                             Icon(
-                                                imageVector = Icons.Default.MonetizationOn,
+                                                imageVector = Icons.Rounded.Sell,
                                                 contentDescription = "Single ticket",
                                                 tint = MaterialTheme.colorScheme.onSurface.copy(
                                                     alpha = 0.7f
@@ -835,7 +838,7 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Timeline,
+                            imageVector = Icons.Rounded.Info,
                             contentDescription = "Journey Info",
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.size(20.dp)
@@ -873,29 +876,29 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                     iconColor = MaterialTheme.colorScheme.primary
                 )
 
-                // Estimated time (placeholder - replace with actual calculation)
-                InfoRow(
-                    icon = Icons.Default.AccessTime,
-                    title = "Estimated Time",
-//                    value = "15-20 minutes",
-                    value = "N/A",
-                    iconColor = MaterialTheme.colorScheme.secondary
-                )
-
-                // Distance (placeholder - replace with actual calculation)
-                InfoRow(
-                    icon = Icons.Default.Timeline,
-                    title = "Distance",
-//                    value = "~12 km",
-                    value = "N/A",
-                    iconColor = MaterialTheme.colorScheme.tertiary
-                )
+//                // Estimated time (placeholder - replace with actual calculation)
+//                InfoRow(
+//                    icon = Icons.Default.AccessTime,
+//                    title = "Estimated Time",
+////                    value = "15-20 minutes",
+//                    value = "N/A",
+//                    iconColor = MaterialTheme.colorScheme.secondary
+//                )
+//
+//                // Distance (placeholder - replace with actual calculation)
+//                InfoRow(
+//                    icon = Icons.Default.Timeline,
+//                    title = "Distance",
+////                    value = "~12 km",
+//                    value = "N/A",
+//                    iconColor = MaterialTheme.colorScheme.tertiary
+//                )
 
                 // Savings with MRT card
                 if (uiState.calculatedFare != uiState.discountedFare) {
                     InfoRow(
-                        icon = Icons.Default.Savings,
-                        title = "MRT Card Savings",
+                        icon = Icons.Rounded.Percent,
+                        title = "MRT Card Discount",
                         value = "৳ ${translateNumber(uiState.calculatedFare - uiState.discountedFare)}",
                         iconColor = MaterialTheme.colorScheme.primary,
                         highlight = true

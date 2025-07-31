@@ -7,7 +7,7 @@
     <string name="language">Language</string>
     <string name="rescan">Rescan</string>
     <string name="latestBalance">Latest Balance</string>
-    <string name="lowBalance">Balance too low for the next trip. Top up needed</string>
+    <string name="lowBalance">Oops! You’ll need to top up before your next journey.</string>
     <string name="tap">Tap Your Card</string>
     <string name="readingCard">Reading card...</string>
     <string name="keepCardSteady">Please keep your card steady</string>
@@ -37,6 +37,7 @@
     <string name="uttaraSouth">Uttara South</string>
     <string name="uttaraCenter">Uttara Center</string>
     <string name="uttaraNorth">Uttara North</string>
+    <string name="topup">Recharge</string>
     <string name="diabari">Dhaka Metro Rail Depot, Diabari</string>
 
     <string name="jan">Jan</string>
