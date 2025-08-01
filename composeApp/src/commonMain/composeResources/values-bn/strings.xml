@@ -74,7 +74,7 @@
     <string name="dec">ডিসেম্বর</string>
 
     <!-- fare calculator-->
-    <string name="fareCalculatorText">এমআরটি ভাড়া ক্যালকুলেটর</string>
+    <string name="fareCalculatorText">ভাড়া হিসাবকারী</string>
     <string name="fareCalculatorDescription">আপনার যাত্রা পরিকল্পনা করুন • ভাড়া দেখুন • ব্যালেন্স ট্র্যাক করুন</string>
     <string name="selectRouteText">রুট নির্বাচন করুন</string>
     <string name="selectRouteDescription">আপনার যাত্রার স্টেশনগুলো নির্বাচন করুন</string>
