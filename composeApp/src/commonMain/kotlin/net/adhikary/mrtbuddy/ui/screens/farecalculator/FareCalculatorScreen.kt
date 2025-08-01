@@ -41,13 +41,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import mrtbuddy.composeapp.generated.resources.Res
+import mrtbuddy.composeapp.generated.resources.fareCalculatorDescription
+import mrtbuddy.composeapp.generated.resources.fareCalculatorText
 import net.adhikary.mrtbuddy.model.CardState
 import net.adhikary.mrtbuddy.ui.screens.components.FareDisplayCard
 import net.adhikary.mrtbuddy.ui.screens.components.StationSelectionSection
 import net.adhikary.mrtbuddy.ui.screens.components.TravelInfoCard
 import net.adhikary.mrtbuddy.ui.screens.components.QuickTipsCard
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -161,16 +166,19 @@ fun FareCalculatorScreen(
 
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "MRT Fare Calculator",
+                                    text = stringResource(Res.string.fareCalculatorText),
                                     style = MaterialTheme.typography.headlineSmall.copy(
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp
                                     ),
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
-                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "Plan your journey • Check fares • Track balance",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    text = stringResource(Res.string.fareCalculatorDescription),
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Normal
+                                    ),
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                 )
                             }

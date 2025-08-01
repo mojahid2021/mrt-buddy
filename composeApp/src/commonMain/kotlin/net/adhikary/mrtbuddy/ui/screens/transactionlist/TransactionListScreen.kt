@@ -70,8 +70,14 @@ import androidx.compose.ui.unit.sp
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 import mrtbuddy.composeapp.generated.resources.Res
+import mrtbuddy.composeapp.generated.resources.added
+import mrtbuddy.composeapp.generated.resources.balance
 import mrtbuddy.composeapp.generated.resources.balanceUpdate
+import mrtbuddy.composeapp.generated.resources.journeys
 import mrtbuddy.composeapp.generated.resources.noTransactionsFound
+import mrtbuddy.composeapp.generated.resources.spent
+import mrtbuddy.composeapp.generated.resources.topup
+import mrtbuddy.composeapp.generated.resources.transactionSummary
 import mrtbuddy.composeapp.generated.resources.transactionsAppearPrompt
 import mrtbuddy.composeapp.generated.resources.unnamedCard
 import net.adhikary.mrtbuddy.data.TransactionEntityWithAmount
@@ -430,7 +436,7 @@ fun TransactionSummaryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Transaction Summary",
+                    text = stringResource(Res.string.transactionSummary),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -447,32 +453,32 @@ fun TransactionSummaryCard(
             ) {
                 SummaryItem(
                     icon = Icons.Default.DirectionsTransit,
-                    label = "Journeys",
+                    label = stringResource(Res.string.journeys),
                     value = "${commuteTransactions.size}",
                     color = MaterialTheme.colorScheme.primary
                 )
                 SummaryItem(
                     icon = Icons.Default.MonetizationOn,
-                    label = "Top-ups",
+                    label = stringResource(Res.string.topup),
                     value = "${balanceUpdates.size + 1}",
                     color = MaterialTheme.colorScheme.tertiary
                 )
                 SummaryItem(
                     icon = Icons.Default.TrendingUp,
-                    label = "Added",
+                    label = stringResource(Res.string.added),
                     value = "৳${translateNumber(totalAdded + 200)}",
                     color = MaterialTheme.colorScheme.primary
                 )
                 SummaryItem(
                     icon = Icons.Default.TrendingDown,
-                    label = "Spent",
+                    label = stringResource(Res.string.spent),
                     value = "৳${translateNumber(totalSpent)}",
                     color = MaterialTheme.colorScheme.error
                 )
                 if (currentBalance != null) {
                     SummaryItem(
                         icon = Icons.Default.AccountBalanceWallet,
-                        label = "Balance",
+                        label = stringResource(Res.string.balance),
                         value = "৳${translateNumber(currentBalance)}",
                         color = MaterialTheme.colorScheme.secondary
                     )

@@ -65,13 +65,26 @@ import androidx.compose.ui.unit.sp
 import mrtbuddy.composeapp.generated.resources.Res
 import mrtbuddy.composeapp.generated.resources.balanceAmount
 import mrtbuddy.composeapp.generated.resources.chooseOrgDest
+import mrtbuddy.composeapp.generated.resources.fareCalculateSuggestionText
+import mrtbuddy.composeapp.generated.resources.fromStationLabel
+import mrtbuddy.composeapp.generated.resources.journeyInformationLabel
+import mrtbuddy.composeapp.generated.resources.mrtCardDiscount
 import mrtbuddy.composeapp.generated.resources.rescan
 import mrtbuddy.composeapp.generated.resources.roundTrips
+import mrtbuddy.composeapp.generated.resources.route
 import mrtbuddy.composeapp.generated.resources.selectDestination
 import mrtbuddy.composeapp.generated.resources.selectOrigin
+import mrtbuddy.composeapp.generated.resources.selectRouteDescription
+import mrtbuddy.composeapp.generated.resources.selectRouteText
 import mrtbuddy.composeapp.generated.resources.selectStations
 import mrtbuddy.composeapp.generated.resources.singleTicket
 import mrtbuddy.composeapp.generated.resources.tapToCheckSufficientBalance
+import mrtbuddy.composeapp.generated.resources.toStationLabel
+import mrtbuddy.composeapp.generated.resources.travelTips1
+import mrtbuddy.composeapp.generated.resources.travelTips2
+import mrtbuddy.composeapp.generated.resources.travelTips3
+import mrtbuddy.composeapp.generated.resources.travelTipsDescription
+import mrtbuddy.composeapp.generated.resources.travelTipsLabel
 import mrtbuddy.composeapp.generated.resources.two_way_arrows
 import mrtbuddy.composeapp.generated.resources.withMRT
 import mrtbuddy.composeapp.generated.resources.yourBalance
@@ -141,15 +154,19 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
 
                     Column {
                         Text(
-                            text = "Select Route",
+                            text = stringResource(Res.string.selectRouteText),
                             style = MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
                             ),
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "Choose your journey stations",
-                            style = MaterialTheme.typography.bodyMedium,
+                            text = stringResource(Res.string.selectRouteDescription),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp
+                            ),
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
                     }
@@ -159,7 +176,7 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
 
             // Enhanced From Station Dropdown
             StationDropdownField(
-                label = "From Station",
+                label = stringResource(Res.string.fromStationLabel),
                 value = uiState.fromStation?.let { StationService.translate(it.name) }
                     ?: stringResource(Res.string.selectOrigin),
                 expanded = uiState.fromExpanded,
@@ -229,7 +246,7 @@ fun StationSelectionSection(uiState: FareCalculatorState, viewModel: FareCalcula
 
             // Enhanced To Station Dropdown
             StationDropdownField(
-                label = "To Station",
+                label = stringResource(Res.string.toStationLabel),
                 value = uiState.toStation?.let { StationService.translate(it.name) }
                     ?: stringResource(Res.string.selectDestination),
                 expanded = uiState.toExpanded,
@@ -472,7 +489,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
-                                text = "Select stations above to calculate fare",
+                                text = stringResource(Res.string.fareCalculateSuggestionText),
                                 style = MaterialTheme.typography.labelLarge.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
@@ -848,15 +865,19 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
 
                 Column {
                     Text(
-                        text = "Journey Information",
+                        text = stringResource(Res.string.journeyInformationLabel),
                         style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
                         ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Travel details and estimates",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 }
@@ -869,7 +890,7 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                 // Route information
                 InfoRow(
                     icon = Icons.Default.Route,
-                    title = "Route",
+                    title = stringResource(Res.string.route),
                     value = "${uiState.fromStation?.let { StationService.translate(it.name) }} → ${
                         uiState.toStation?.let { StationService.translate(it.name) }
                     }",
@@ -898,7 +919,7 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                 if (uiState.calculatedFare != uiState.discountedFare) {
                     InfoRow(
                         icon = Icons.Rounded.Percent,
-                        title = "MRT Card Discount",
+                        title = stringResource(Res.string.mrtCardDiscount),
                         value = "৳ ${translateNumber(uiState.calculatedFare - uiState.discountedFare)}",
                         iconColor = MaterialTheme.colorScheme.primary,
                         highlight = true
@@ -1018,15 +1039,19 @@ fun QuickTipsCard() {
 
                 Column {
                     Text(
-                        text = "Travel Tips",
+                        text = stringResource(Res.string.travelTipsLabel),
                         style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
                         ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Smart commuting advice",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(Res.string.travelTipsDescription),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 }
@@ -1038,19 +1063,19 @@ fun QuickTipsCard() {
             ) {
                 TipItem(
                     icon = Icons.Default.AccountBalanceWallet,
-                    text = "Use MRT Pass for discounted fares and faster boarding",
+                    text = stringResource(Res.string.travelTips1),
                     iconColor = MaterialTheme.colorScheme.primary
                 )
 
                 TipItem(
                     icon = Icons.Default.AccessTime,
-                    text = "Avoid peak hours (8-10 AM, 5-7 PM) for comfortable travel",
+                    text = stringResource(Res.string.travelTips2),
                     iconColor = MaterialTheme.colorScheme.secondary
                 )
 
                 TipItem(
                     icon = Icons.AutoMirrored.Filled.TrendingUp,
-                    text = "Check your card balance regularly to avoid delays",
+                    text = stringResource(Res.string.travelTips3),
                     iconColor = MaterialTheme.colorScheme.tertiary
                 )
             }

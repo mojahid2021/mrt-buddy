@@ -75,6 +75,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinx.datetime.LocalDateTime
+import mrtbuddy.composeapp.generated.resources.recentActivity
 
 
 //TimeFormatter function to format LocalDateTime to AM/PM format
@@ -460,7 +461,7 @@ private fun ModernHomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Recent Activity",
+                    text = stringResource(Res.string.recentActivity),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface

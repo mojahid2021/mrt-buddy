@@ -76,17 +76,29 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mrtbuddy.composeapp.generated.resources.Res
+import mrtbuddy.composeapp.generated.resources.deviceCompatibilityWarningText
+import mrtbuddy.composeapp.generated.resources.deviceCompatibilityWarningTitle
 import mrtbuddy.composeapp.generated.resources.enableNfc
 import mrtbuddy.composeapp.generated.resources.hold
 import mrtbuddy.composeapp.generated.resources.keepCardSteady
 import mrtbuddy.composeapp.generated.resources.latestBalance
 import mrtbuddy.composeapp.generated.resources.lowBalance
+import mrtbuddy.composeapp.generated.resources.nfcDisabledText
+import mrtbuddy.composeapp.generated.resources.nfcEnableText
 import mrtbuddy.composeapp.generated.resources.noNfcSupport
+import mrtbuddy.composeapp.generated.resources.normalBalanceText
+import mrtbuddy.composeapp.generated.resources.normalLowBalanceText
+import mrtbuddy.composeapp.generated.resources.quickSetupGuideText
+import mrtbuddy.composeapp.generated.resources.quickSetupGuideText1
+import mrtbuddy.composeapp.generated.resources.quickSetupGuideText2
+import mrtbuddy.composeapp.generated.resources.quickSetupGuideText3
 import mrtbuddy.composeapp.generated.resources.readingCard
 import mrtbuddy.composeapp.generated.resources.requiredNfc
 import mrtbuddy.composeapp.generated.resources.rescan
 import mrtbuddy.composeapp.generated.resources.tap
 import mrtbuddy.composeapp.generated.resources.tapRescanToStart
+import mrtbuddy.composeapp.generated.resources.tips
+import mrtbuddy.composeapp.generated.resources.tipsText
 import net.adhikary.mrtbuddy.getPlatform
 import net.adhikary.mrtbuddy.managers.RescanManager
 import net.adhikary.mrtbuddy.model.CardState
@@ -194,7 +206,7 @@ fun BalanceCard(
                                     color = Color.White
                                 )
                                 Text(
-                                    text = if (isRapidPass) "RapidPass Card" else "MRT Pass Card",
+                                    text = if (isRapidPass) "Rapid Pass Card" else "MRT Pass Card",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color.White.copy(alpha = 0.8f)
                                 )
@@ -463,7 +475,7 @@ private fun ModernBalanceContent(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
-                        text = "💡 Recharge soon to enjoy seamless journeys!",
+                        text = "💡 ${stringResource(Res.string.normalLowBalanceText)}",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -482,7 +494,7 @@ private fun ModernBalanceContent(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
-                        text = "✅ Your balance can easily cover a few more trips.",
+                        text = "✅ ${stringResource(Res.string.normalBalanceText)}",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -596,7 +608,8 @@ private fun ModernReadingContent() {
 @Composable
 private fun ModernWaitingContent() {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(28.dp)
     ) {
@@ -635,7 +648,8 @@ private fun ModernWaitingContent() {
             Text(
                 text = stringResource(Res.string.tap),
                 style = MaterialTheme.typography.displaySmall.copy(
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 30.sp
                 ),
                 textAlign = TextAlign.Center
             )
@@ -646,7 +660,10 @@ private fun ModernWaitingContent() {
                 } else {
                     stringResource(Res.string.hold)
                 },
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp
+                ),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 lineHeight = MaterialTheme.typography.titleMedium.lineHeight
@@ -655,6 +672,9 @@ private fun ModernWaitingContent() {
         // Modern instruction card with enhanced design
 
         Card(
+            modifier = Modifier
+                .wrapContentSize()
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
             ),
@@ -676,7 +696,7 @@ private fun ModernWaitingContent() {
                         modifier = Modifier.size(24.dp)
                     )
                     Text(
-                        text = "Tips",
+                        text = stringResource(Res.string.tips),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
@@ -685,7 +705,7 @@ private fun ModernWaitingContent() {
                 }
 
                 Text(
-                    text = "Hold your card against the NFC area of your device and Keep it steady until the scan completes.",
+                    text = stringResource(Res.string.tipsText),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
@@ -850,14 +870,14 @@ private fun ModernNoNfcSupportContent() {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Device Compatibility",
+                    text = stringResource(Res.string.deviceCompatibilityWarningTitle),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "This device doesn't support NFC functionality required for card scanning. You'll need a different device with NFC capability.",
+                    text = stringResource(Res.string.deviceCompatibilityWarningText),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
@@ -870,7 +890,8 @@ private fun ModernNoNfcSupportContent() {
 @Composable
 private fun ModernNfcDisabledContent() {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
@@ -901,50 +922,56 @@ private fun ModernNfcDisabledContent() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "⚙️ NFC is Disabled",
+                text = stringResource(Res.string.nfcDisabledText),
                 style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp
                 ),
                 color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center
             )
 
             Text(
-                text = "Please enable NFC in your device settings to scan cards.",
-                style = MaterialTheme.typography.titleMedium,
+                text = stringResource(Res.string.nfcEnableText),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp
+                ),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 lineHeight = MaterialTheme.typography.titleMedium.lineHeight
             )
         }
 
-        // Platform-specific NFC enable functionality
-        if (getPlatform().name == "android") {
-            Button(
-                onClick = {
-                    // For production, you'd want to open NFC settings
-                    // This is a placeholder for the actual Android implementation
-                },
-                modifier = Modifier.fillMaxWidth(0.8f),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = stringResource(Res.string.enableNfc),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-            }
-        }
+//        // Platform-specific NFC enable functionality
+//        if (getPlatform().name == "android") {
+//            Button(
+//                onClick = {
+//                    // For production, you'd want to open NFC settings
+//                    // This is a placeholder for the actual Android implementation
+//                },
+//                modifier = Modifier.fillMaxWidth(0.8f),
+//                shape = RoundedCornerShape(16.dp)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Settings,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(20.dp)
+//                )
+//                Spacer(modifier = Modifier.width(10.dp))
+//                Text(
+//                    text = stringResource(Res.string.enableNfc),
+//                    style = MaterialTheme.typography.titleMedium.copy(
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                )
+//            }
+//        }
 
         // Enhanced help card with step-by-step guide
         Card(
+            modifier = Modifier
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
             ),
@@ -952,33 +979,49 @@ private fun ModernNfcDisabledContent() {
         ) {
             Column(
                 modifier = Modifier.padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement
+                    .spacedBy(12.dp)
             ) {
-                Text(
-                    text = "💡 Quick Setup Guide",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "💡 ${stringResource(Res.string.quickSetupGuideText)}",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            ),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = "1. Go to Settings → Connected devices",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(Res.string.quickSetupGuideText1),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 12.sp
+                        ),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
                     Text(
-                        text = "2. Find and enable NFC",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        text = stringResource(Res.string.quickSetupGuideText2),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 12.sp
+                        ), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
                     Text(
-                        text = "3. Return to this app and try again",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                        text = stringResource(Res.string.quickSetupGuideText3),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 12.sp
+                        ), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
                 }
             }

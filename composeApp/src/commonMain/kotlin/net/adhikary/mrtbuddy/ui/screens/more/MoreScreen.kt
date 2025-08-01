@@ -60,17 +60,25 @@ import mrtbuddy.composeapp.generated.resources.autoSaveCardDetails
 import mrtbuddy.composeapp.generated.resources.autoSaveCardDetailsDescription
 import mrtbuddy.composeapp.generated.resources.card
 import mrtbuddy.composeapp.generated.resources.contributors
+import mrtbuddy.composeapp.generated.resources.contributorsDescription
+import mrtbuddy.composeapp.generated.resources.getHelpDescription
 import mrtbuddy.composeapp.generated.resources.help
 import mrtbuddy.composeapp.generated.resources.helpAndSupportButton
 import mrtbuddy.composeapp.generated.resources.language
 import mrtbuddy.composeapp.generated.resources.license
+import mrtbuddy.composeapp.generated.resources.metroStationMapDescription
 import mrtbuddy.composeapp.generated.resources.nonAffiliationDisclaimer
 import mrtbuddy.composeapp.generated.resources.openSourceLicenses
+import mrtbuddy.composeapp.generated.resources.openSourceLicensesDescription
 import mrtbuddy.composeapp.generated.resources.others
 import mrtbuddy.composeapp.generated.resources.policy
 import mrtbuddy.composeapp.generated.resources.privacyPolicy
+import mrtbuddy.composeapp.generated.resources.privacyPolicyDescription
 import mrtbuddy.composeapp.generated.resources.readOnlyDisclaimer
+import mrtbuddy.composeapp.generated.resources.selectLanguageDescription
 import mrtbuddy.composeapp.generated.resources.settings
+import mrtbuddy.composeapp.generated.resources.settingsAndMore
+import mrtbuddy.composeapp.generated.resources.settingsAndMoreDescription
 import mrtbuddy.composeapp.generated.resources.stationMap
 import mrtbuddy.composeapp.generated.resources.station_map
 import net.adhikary.mrtbuddy.Language
@@ -341,7 +349,7 @@ private fun EnhancedHeaderSection() {
                         modifier = Modifier.alpha(titleAlpha)
                     ) {
                         Text(
-                            text = "Settings & More",
+                            text = stringResource(Res.string.settingsAndMore),
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Black,
                             color = Color.White,
@@ -350,7 +358,7 @@ private fun EnhancedHeaderSection() {
                             letterSpacing = (-0.5).sp
                         )
                         Text(
-                            text = "Personalize your MRT experience",
+                            text = stringResource(Res.string.settingsAndMoreDescription),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.White.copy(alpha = 0.9f),
                             textAlign = TextAlign.Center,
@@ -455,7 +463,7 @@ private fun AnimatedSettingsSection(
 
         ModernSettingItem(
             title = stringResource(Res.string.language),
-            subtitle = "Switch between English and বাংলা",
+            subtitle = stringResource(Res.string.selectLanguageDescription),
             icon = painterResource(Res.drawable.language),
             trailing = {
                 Surface(
@@ -487,7 +495,7 @@ private fun AnimatedToolsSection(
     ) {
         ModernSettingItem(
             title = stringResource(Res.string.stationMap),
-            subtitle = "View the complete metro rail network map",
+            subtitle = stringResource(Res.string.metroStationMapDescription),
             icon = painterResource(Res.drawable.station_map),
             onClick = onStationMapClick,
             showArrow = true
@@ -508,7 +516,7 @@ private fun AnimatedSupportSection(
     ) {
         ModernSettingItem(
             title = stringResource(Res.string.privacyPolicy),
-            subtitle = "Read our privacy policy and data handling practices",
+            subtitle = stringResource(Res.string.privacyPolicyDescription),
             icon = painterResource(Res.drawable.policy),
             onClick = onPrivacyPolicyClick,
             showArrow = true
@@ -521,7 +529,7 @@ private fun AnimatedSupportSection(
 
         ModernSettingItem(
             title = stringResource(Res.string.helpAndSupportButton),
-            subtitle = "Get help and support for using the app",
+            subtitle = stringResource(Res.string.getHelpDescription),
             icon = painterResource(Res.drawable.help),
             onClick = onHelpClick,
             showArrow = true
@@ -534,7 +542,7 @@ private fun AnimatedSupportSection(
 
         ModernSettingItem(
             title = stringResource(Res.string.contributors),
-            subtitle = "Meet the people who made this app possible",
+            subtitle = stringResource(Res.string.contributorsDescription),
             icon = painterResource(Res.drawable.contributors),
             onClick = onContributorsClick,
             showArrow = true
@@ -547,7 +555,7 @@ private fun AnimatedSupportSection(
 
         ModernSettingItem(
             title = stringResource(Res.string.openSourceLicenses),
-            subtitle = "View licenses for third-party libraries used",
+            subtitle = stringResource(Res.string.openSourceLicensesDescription),
             icon = painterResource(Res.drawable.license),
             onClick = onLicensesClick,
             showArrow = true
