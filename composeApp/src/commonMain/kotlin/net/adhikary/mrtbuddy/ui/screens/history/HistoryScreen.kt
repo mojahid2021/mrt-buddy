@@ -331,7 +331,7 @@ fun HistoryScreen(
                                         color = MaterialTheme.colorScheme.primary
                                     )
                                     Text(
-                                        text = "To get started, scan your MRT or RapidPass card using NFC. Your card history and balance will appear here.",
+                                        text = "To get started, scan your MRT or Rapid Pass card using NFC. Your card history and balance will appear here.",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )

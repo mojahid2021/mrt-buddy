@@ -12,7 +12,7 @@
     <string name="tips">Tips</string>
     <string name="tipsText">Hold your card against the NFC area of your device and Keep it steady until the scan completes.</string>
     <string name="nfcDisabledText">NFC is Disabled</string>
-    <string name="nfcEnableText">Please enable NFC in your device to scan cards.</string>
+    <string name="nfcEnableText">Please enable NFC in your device settings to scan the cards.</string>
     <string name="quickSetupGuideText">Quick Setup Guide</string>
     <string name="quickSetupGuideText1">1. Go to Settings</string>
     <string name="quickSetupGuideText2">2. Find and enable NFC</string>
@@ -56,7 +56,7 @@
     <string name="diabari">Dhaka Metro Rail Depot, Diabari</string>
     <string name="transactionSummary">Transaction Summary</string>
     <string name="journeys">Journeys</string>
-    <string name="added">Added</string>
+    <string name="added">Top-ups</string>
     <string name="spent">Spent</string>
 
 
@@ -77,7 +77,7 @@
     <string name="fareCalculatorText">MRT Fare Calculator</string>
     <string name="fareCalculatorDescription">Plan your journey • Check fares • Track balance</string>
     <string name="selectRouteText">Select Route</string>
-    <string name="selectRouteDescription">Choose your journey stations</string>
+    <string name="selectRouteDescription">Choose your stations</string>
     <string name="fromStationLabel">From</string>
     <string name="toStationLabel">To</string>
     <string name="fareCalculateSuggestionText">Select stations above to calculate fare</string>
@@ -86,16 +86,16 @@
     <string name="route">Route</string>
     <string name="mrtCardDiscount">MRT Card Discount</string>
     <string name="travelTipsLabel">Travel Tips</string>
-    <string name="travelTipsDescription">Smart commuting advice</string>
-    <string name="travelTips1">Use MRT Pass for discounted fares and faster boarding</string>
-    <string name="travelTips2">Avoid peak hours (8-10 AM, 5-7 PM) for comfortable travel</string>
+    <string name="travelTipsDescription">Smart commuting tips</string>
+    <string name="travelTips1">Use your MRT Pass for discounts and faster boarding</string>
+    <string name="travelTips2">Avoid peak hours (8–10 AM, 5–7 PM) for a more comfortable journey</string>
     <string name="travelTips3">Check your card balance regularly to avoid delays</string>
 
 
 
-    <string name="selectStation">Select stations</string>
-    <string name="chooseOrgDest">Choose origin and destination\nto calculate fare</string>
-    <string name="withMRT">with MRT/Rapid Pass</string>
+    <string name="selectStation">Select Stations</string>
+    <string name="chooseOrgDest">Choose origin and destination stations to calculate fare</string>
+    <string name="withMRT">With MRT/Rapid Pass</string>
     <string name="singleTicket">Single Ticket</string>
     <string name="discount">Discount</string>
     <string name="yourBalance">Your balance is</string>
@@ -103,8 +103,8 @@
     <string name="tapToCheckSufficientBalance">Tap your card to check if you have sufficient balance</string>
     <string name="rescanToCheckSufficientBalance">Rescan your card to check if you have sufficient balance</string>
     <string name="selectStations">Select Stations</string>
-    <string name="selectOrigin">Select Origin Station</string>
-    <string name="selectDestination">Select Destination Station</string>
+    <string name="selectOrigin">Select origin station</string>
+    <string name="selectDestination">Select destination station</string>
     <string name="roundTrips">x Round Trip(s)</string>
     <string name="balanceAmount">Balance</string>
     <string name="need_more_amount">Need ৳ %s more</string>
