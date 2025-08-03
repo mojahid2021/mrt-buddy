@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -669,10 +670,10 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                 imageVector = Icons.Default.CheckCircle,
                                                 contentDescription = "Sufficient balance",
                                                 tint = MaterialTheme.colorScheme.primary,
-                                                modifier = Modifier.size(20.dp)
+                                                modifier = Modifier.size(18.dp).offset(y = (-2).dp)
                                             )
                                             Text(
-                                                text = "${stringResource(Res.string.balanceAmount)} ৳ ${
+                                                text = "  ${stringResource(Res.string.balanceAmount)} ৳ ${
                                                     translateNumber(
                                                         balance
                                                     )
