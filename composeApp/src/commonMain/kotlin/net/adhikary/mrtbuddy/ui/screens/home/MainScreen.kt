@@ -77,6 +77,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import kotlinx.datetime.LocalDateTime
 import mrtbuddy.composeapp.generated.resources.recentActivity
 import net.adhikary.mrtbuddy.nfc.service.StationService
+import net.adhikary.mrtbuddy.translateNumber
 
 
 //TimeFormatter function to format LocalDateTime to AM/PM format
@@ -572,7 +573,7 @@ private fun ModernTransactionItem(
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "৳${transaction.transaction.balance}",
+                    text = "৳${translateNumber(transaction.transaction.balance)}",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -580,7 +581,7 @@ private fun ModernTransactionItem(
                 )
                 transaction.amount?.let { amount ->
                     Text(
-                        text = if (amount > 0) "+৳$amount" else "৳$amount",
+                        text = if (amount > 0) "+৳${translateNumber(amount)}" else "৳${translateNumber(amount)}",
                         style = MaterialTheme.typography.bodySmall,
                         color = if (amount > 0)
                             MaterialTheme.colorScheme.primary

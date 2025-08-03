@@ -454,13 +454,13 @@ fun TransactionSummaryCard(
                 SummaryItem(
                     icon = Icons.Default.DirectionsTransit,
                     label = stringResource(Res.string.journeys),
-                    value = "${commuteTransactions.size}",
+                    value = translateNumber(commuteTransactions.size),
                     color = MaterialTheme.colorScheme.primary
                 )
                 SummaryItem(
                     icon = Icons.Default.MonetizationOn,
                     label = stringResource(Res.string.topup),
-                    value = "${balanceUpdates.size + 1}",
+                    value = translateNumber(balanceUpdates.size + 1),
                     color = MaterialTheme.colorScheme.tertiary
                 )
                 SummaryItem(
