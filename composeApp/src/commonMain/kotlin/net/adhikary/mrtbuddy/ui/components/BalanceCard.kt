@@ -95,6 +95,7 @@ import mrtbuddy.composeapp.generated.resources.quickSetupGuideText3
 import mrtbuddy.composeapp.generated.resources.readingCard
 import mrtbuddy.composeapp.generated.resources.requiredNfc
 import mrtbuddy.composeapp.generated.resources.rescan
+import mrtbuddy.composeapp.generated.resources.scanFailed
 import mrtbuddy.composeapp.generated.resources.tap
 import mrtbuddy.composeapp.generated.resources.tapRescanToStart
 import mrtbuddy.composeapp.generated.resources.tips
@@ -750,7 +751,7 @@ private fun ModernErrorContent(message: String) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Scan Failed",
+                text = stringResource(Res.string.scanFailed),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),

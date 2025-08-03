@@ -31,7 +31,8 @@
     <string name="normalBalanceText">Your balance can easily cover a few more trips.</string>
     <string name="deviceCompatibilityWarningTitle">Device Compatibility</string>
     <string name="deviceCompatibilityWarningText">This device doesn't support NFC functionality required for card scanning. You'll need a different device with NFC capability.</string>
-
+    <string name="scanFailed">Scan Failed</string>
+    <string name="scanFailedText1">Balance not found. You moved the card too fast.</string>
     <!-- transaction histories -->
     <string name="recentJourneys">Recent Journeys</string>
     <string name="balanceUpdate">Balance Update</string>
