@@ -672,7 +672,7 @@ fun FareDisplayCard(uiState: FareCalculatorState, viewModel: FareCalculatorViewM
                                                 modifier = Modifier.size(20.dp)
                                             )
                                             Text(
-                                                text = "${stringResource(Res.string.balanceAmount)} ৳ ${
+                                                text = "  ${stringResource(Res.string.balanceAmount)} ৳ ${
                                                     translateNumber(
                                                         balance
                                                     )
