@@ -14,6 +14,7 @@ import mrtbuddy.composeapp.generated.resources.mirpur10
 import mrtbuddy.composeapp.generated.resources.mirpur11
 import mrtbuddy.composeapp.generated.resources.motijheel
 import mrtbuddy.composeapp.generated.resources.pallabi
+import mrtbuddy.composeapp.generated.resources.recharge
 import mrtbuddy.composeapp.generated.resources.shahbagh
 import mrtbuddy.composeapp.generated.resources.shewrapara
 import mrtbuddy.composeapp.generated.resources.topup
@@ -68,7 +69,7 @@ object StationService {
             "Uttara South" -> stringResource(Res.string.uttaraSouth)
             "Uttara Center" -> stringResource(Res.string.uttaraCenter)
             "Uttara North" -> stringResource(Res.string.uttaraNorth)
-            "TopUP" -> stringResource(Res.string.topup)
+            "Recharge" -> stringResource(Res.string.recharge)
             else -> "" // Default to English if no match is found
         }
     }
