@@ -10,7 +10,7 @@
     <string name="lowBalance">Oops! You’ll need to top up before your next journey.</string>
     <string name="tap">Tap Your Card</string>
     <string name="tips">Tips</string>
-    <string name="tipsText">Hold your card against the NFC area of your device and Keep it steady until the scan completes.</string>
+    <string name="tipsText">Hold your card near the NFC area and keep it steady to scan.</string>
     <string name="nfcDisabledText">NFC is Disabled</string>
     <string name="nfcEnableText">Please enable NFC in your device settings to scan the cards.</string>
     <string name="quickSetupGuideText">Quick Setup Guide</string>
