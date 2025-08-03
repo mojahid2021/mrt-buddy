@@ -19,7 +19,7 @@
     <string name="quickSetupGuideText3">৩. এই অ্যাপে ফিরে আসুন এবং আবার চেষ্টা করুন</string>
     <string name="readingCard">কার্ড পড়া হচ্ছে...</string>
     <string name="keepCardSteady">দয়া করে আপনার কার্ডটি স্থির রাখুন</string>
-    <string name="hold">ব্যালেন্স দেখার জন্য ফোনের পিছনে কার্ডটি ধরুন।</string>
+    <string name="hold">ব্যালেন্স দেখার জন্য ফোনের পিছনে কার্ডটি ধরুন</string>
     <string name="noNfcSupport">এই ডিভাইসটি এনএফসি সমর্থন করে না</string>
     <string name="requiredNfc">আপনার এমআরটি পাস পড়ার জন্য এনএফসি প্রয়োজন, যা এই ডিভাইসটি সমর্থন করে না</string>
     <string name="nfcDisabled">এনএফসি বন্ধ করা</string>
