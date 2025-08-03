@@ -76,6 +76,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinx.datetime.LocalDateTime
 import mrtbuddy.composeapp.generated.resources.recentActivity
+import net.adhikary.mrtbuddy.nfc.service.StationService
 
 
 //TimeFormatter function to format LocalDateTime to AM/PM format
@@ -540,7 +541,9 @@ private fun ModernTransactionItem(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = if (transaction.transaction.fromStation.isNotEmpty())
-                        "${transaction.transaction.fromStation} → ${transaction.transaction.toStation}"
+                        "${StationService.translate(transaction.transaction.fromStation)} → ${
+                            StationService.translate(transaction.transaction.toStation)
+                        }"
                     else "Balance Update",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium

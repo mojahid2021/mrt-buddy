@@ -698,7 +698,8 @@ fun EnhancedTransactionItem(trxEntity: TransactionEntityWithAmount) {
                 }
 
                 Text(
-                    text = if (transactionType == TransactionType.BalanceUpdate) "Top-up" else "Journey",
+                    text = if (transactionType == TransactionType.BalanceUpdate) stringResource(Res.string.topup) else stringResource(
+                        Res.string.journeys),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )

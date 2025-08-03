@@ -68,6 +68,7 @@ import mrtbuddy.composeapp.generated.resources.balanceAmount
 import mrtbuddy.composeapp.generated.resources.chooseOrgDest
 import mrtbuddy.composeapp.generated.resources.fareCalculateSuggestionText
 import mrtbuddy.composeapp.generated.resources.fromStationLabel
+import mrtbuddy.composeapp.generated.resources.journeyInformationDescription
 import mrtbuddy.composeapp.generated.resources.journeyInformationLabel
 import mrtbuddy.composeapp.generated.resources.mrtCardDiscount
 import mrtbuddy.composeapp.generated.resources.rescan
@@ -874,7 +875,7 @@ fun TravelInfoCard(uiState: FareCalculatorState) {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Travel details and estimates",
+                        text = stringResource(Res.string.journeyInformationDescription),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium
