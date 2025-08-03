@@ -8,9 +8,9 @@
     <string name="rescan">পুনরায় স্ক্যান</string>
     <string name="latestBalance">সর্বশেষ ব্যালেন্স</string>
     <string name="lowBalance">পরবর্তী ভ্রমণের জন্য আপনার পর্যাপ্ত ব্যালেন্স নেই। টপ আপ করুন</string>
-    <string name="tap">আপনার কার্ডটি ট্যাপ করুন</string>
+    <string name="tap">কার্ডটি ট্যাপ করুন</string>
     <string name="tips">টিপস</string>
-    <string name="tipsText">আপনার কার্ডটি আপনার ডিভাইসের NFC এরিয়ার সাথে স্ক্যান সম্পূর্ণ না হওয়া পর্যন্ত ধরে রাখুন।</string>
+    <string name="tipsText">কার্ডটি NFC এরিয়ায় স্ক্যান শেষ না হওয়া পর্যন্ত ধরে রাখুন।</string>
     <string name="nfcDisabledText">NFC বন্ধ আছে</string>
     <string name="nfcEnableText">আপনার কার্ড স্ক্যান করতে ডিভাইসের সেটিংসে গিয়ে NFC চালু করুন।</string>
     <string name="quickSetupGuideText">দ্রুত সেটআপ গাইড</string>
@@ -19,7 +19,7 @@
     <string name="quickSetupGuideText3">৩. এই অ্যাপে ফিরে আসুন এবং আবার চেষ্টা করুন</string>
     <string name="readingCard">কার্ড পড়া হচ্ছে...</string>
     <string name="keepCardSteady">দয়া করে আপনার কার্ডটি স্থির রাখুন</string>
-    <string name="hold">ব্যালেন্স পড়ার জন্য আপনার ফোনের পিছনে কার্ডটি ধরুন</string>
+    <string name="hold">ব্যালেন্স দেখার জন্য ফোনের পিছনে কার্ডটি ধরুন</string>
     <string name="noNfcSupport">এই ডিভাইসটি এনএফসি সমর্থন করে না</string>
     <string name="requiredNfc">আপনার এমআরটি পাস পড়ার জন্য এনএফসি প্রয়োজন, যা এই ডিভাইসটি সমর্থন করে না</string>
     <string name="nfcDisabled">এনএফসি বন্ধ করা</string>
